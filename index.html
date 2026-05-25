@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ПОД/ФТ — главная</title>
+<style>
+:root{--bg:#0b1020;--card:#111827;--muted:#94a3b8;--text:#e5e7eb;--acc:#22c55e;--line:#243041}
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,Helvetica,sans-serif;background:linear-gradient(180deg,#0b1020,#111827);color:var(--text)}
+.wrap{max-width:1180px;margin:0 auto;padding:24px}
+.nav{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px}
+.nav a{color:var(--text);text-decoration:none;padding:10px 14px;border:1px solid var(--line);border-radius:12px;background:#0f172a}
+.nav a.active{background:var(--acc);color:#052e16;border-color:transparent;font-weight:700}
+.hero,.card{background:#111827;border:1px solid var(--line);border-radius:18px;padding:20px}
+.hero{margin-bottom:18px}
+h1{margin:0 0 10px;font-size:30px}
+.muted{color:var(--muted);line-height:1.6}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.item{background:#0f172a;border:1px solid var(--line);border-radius:16px;padding:16px}
+.item h3{margin:0 0 8px}
+.btn{display:inline-block;margin-top:14px;background:var(--acc);color:#052e16;padding:12px 16px;border-radius:12px;text-decoration:none;font-weight:700}
+@media(max-width:900px){.grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="nav">
+    <a class="active" href="index.html">Главная</a>
+    <a href="id.html">Идентификационно-структурный</a>
+    <a href="oper.html">Операционно-деловой</a>
+    <a href="fin.html">Финансово-экономический</a>
+    <a href="external.html">Внешние признаки</a>
+    <a href="result.html">Итог</a>
+  </div>
+
+  <section class="hero">
+    <h1>Экспресс-оценка риска ПОД/ФТ</h1>
+    <div class="muted">
+      Сайт считает риск по твоим индикаторам, автоматически вычисляет формулы, сравнивает их с критическими значениями и собирает итоговый показатель R*.
+    </div>
+    <a class="btn" href="id.html">Начать</a>
+  </section>
+
+  <section class="card">
+    <div class="grid">
+      <div class="item"><h3>Блок 1</h3><div class="muted">Идентификационно-структурные признаки.</div></div>
+      <div class="item"><h3>Блок 2</h3><div class="muted">Операционно-деловые признаки.</div></div>
+      <div class="item"><h3>Блок 3</h3><div class="muted">Финансово-экономические индикаторы.</div></div>
+      <div class="item"><h3>Блок 4</h3><div class="muted">Внешние качественные признаки.</div></div>
+    </div>
+  </section>
+</div>
+</body>
+</html>
