@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Финансово-экономический</title>
+<style>
+:root{--bg:#0b1020;--card:#111827;--muted:#94a3b8;--text:#e5e7eb;--acc:#22c55e;--line:#243041}
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,Helvetica,sans-serif;background:linear-gradient(180deg,#0b1020,#111827);color:var(--text)}
+.wrap{max-width:1180px;margin:0 auto;padding:24px}
+.nav{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px}
+.nav a{color:var(--text);text-decoration:none;padding:10px 14px;border:1px solid var(--line);border-radius:12px;background:#0f172a}
+.nav a.active{background:var(--acc);color:#052e16;border-color:transparent;font-weight:700}
+.card{background:rgba(17,24,39,.95);border:1px solid var(--line);border-radius:18px;padding:20px;margin-bottom:16px}
+h1{margin:0 0 8px}
+.muted{color:var(--muted)}
+.block{margin-top:14px;padding:14px;border:1px solid #243041;border-radius:16px;background:#0f172a}
+.row{display:grid;grid-template-columns:1.5fr 1fr 1fr 120px;gap:10px;align-items:center;margin:10px 0}
+.row input,.row select{width:100%;padding:10px 12px;border-radius:12px;background:#111827;color:var(--text);border:1px solid #334155}
+.small{font-size:13px;color:#94a3b8}
+.score{font-weight:700}
+.btn{display:inline-block;margin-top:14px;background:var(--acc);color:#052e16;padding:12px 16px;border-radius:12px;text-decoration:none;font-weight:700}
+@media(max-width:900px){.row{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="nav">
+    <a href="index.html">Главная</a>
+    <a href="id.html">Идентификационно-структурный</a>
+    <a href="oper.html">Операционно-деловой</a>
+    <a class="active" href="fin.html">Финансово-экономический</a>
+    <a href="external.html">Внешние признаки</a>
+    <a href="result.html">Итог</a>
+  </div>
+
+  <section class="card">
+    <h1>Финансово-экономический блок</h1>
+    <div class="muted">Пользователь вводит исходные данные, сайт сам считает процент и сравнивает с критерием.</div>
+
+    <div class="block">
+      <div><b>Доля основных средств в активах, %</b><div class="small">Формула: ОС / А × 100. Критическое значение: &lt; 10 или &gt; 70.</div></div>
+      <div class="row">
+        <input id="os" type="number" placeholder="Основные средства">
+        <input id="assets1" type="number" placeholder="Активы">
+        <select id="osFlag"><option value="0">Нет критического</option><option value="1">Есть критическое</option></select>
+        <div class="score" id="osRes">0.000</div>
+      </div>
+    </div>
+
+    <div class="block">
+      <div><b>Доля денежных средств в активах, %</b><div class="small">Формула: Денежные средства / А × 100. Критическое значение: &gt; 50.</div></div>
+      <div class="row">
+        <input id="cash" type="number" placeholder="Денежные средства">
+        <input id="assets2" type="number" placeholder="Активы">
+        <select id="cashFlag"><option value="0">Нет критического</option><option value="1">Есть критическое</option></select>
+        <div class="score" id="cashRes">0.000</div>
+      </div>
+    </div>
+
+    <div class="block">
+      <div><b>Рентабельность продаж, %</b><div class="small">Формула: Чистая прибыль / Выручка × 100. Критическое значение: &lt; 0 или &gt; 25.</div></div>
+      <div class="row">
+        <input id="profit" type="number" placeholder="Чистая прибыль">
+        <input id="revenue" type="number" placeholder="Выручка">
+        <select id="marginFlag"><option value="0">Нет критического</option><option value="1">Есть критическое</option></select>
+        <div class="score" id="marginRes">0.000</div>
+      </div>
+    </div>
+
+    <div class="block">
+      <div><b>Темп роста выручки за год, %</b><div class="small">Формула: (Выр_t / Выр_t-1 − 1) × 100. Критическое значение: &gt; 100 при отсутствии объяснения.</div></div>
+      <div class="row">
+        <input id="revt" type="number" placeholder="Выручка t">
+        <input id="revt1" type="number" placeholder="Выручка t-1">
+        <select id="growthFlag"><option value="0">Нет критического</option><option value="1">Есть критическое</option></select>
+        <div class="score" id="growthRes">0.000</div>
+      </div>
+    </div>
+
+    <div class="block">
+      <div><b>Доля прочих доходов в общей сумме доходов, %</b><div class="small">Формула: Прочие доходы / Общие доходы × 100. Критическое значение: &gt; 20.</div></div>
+      <div class="row">
+        <input id="otherinc" type="number" placeholder="Прочие доходы">
+        <input id="allinc" type="number" placeholder="Общие доходы">
+        <select id="otherFlag"><option value="0">Нет критического</option><option value="1">Есть критическое</option></select>
+        <div class="score" id="otherRes">0.000</div>
+      </div>
+    </div>
+
+    <div class="block">
+      <div><b>Убыточность</b><div class="small">Формула: Чистая прибыль &lt; 0. Значение: да / нет.</div></div>
+      <div class="row">
+        <input id="profit2" type="number" placeholder="Чистая прибыль">
+        <div></div>
+        <select id="lossFlag"><option value="0">Нет</option><option value="1">Да</option></select>
+        <div class="score" id="lossRes">0.000</div>
+      </div>
+    </div>
+
+    <a class="btn" href="external.html" onclick="saveBlock()">Далее</a>
+  </section>
+</div>
+
+<script>
+const w={os:0.039,cash:0.031,margin:0.031,growth:0.024,other:0.039,loss:0.036};
+function pct(a,b){a=+a;b=+b;if(!isFinite(a)||!isFinite(b)||b===0)return 0;return a/b*100}
+function calc(){
+  const osv=pct(os.value,assets1.value);osRes.textContent=osv.toFixed(3);
+  const cashv=pct(cash.value,assets2.value);cashRes.textContent=cashv.toFixed(3);
+  const marginv=pct(profit.value,revenue.value);marginRes.textContent=marginv.toFixed(3);
+  const growthv=((+revt.value||0)/((+revt1.value||0)||1)-1)*100;growthRes.textContent=growthv.toFixed(3);
+  const otherv=pct(otherinc.value,allinc.value);otherRes.textContent=otherv.toFixed(3);
+  const lossv=(+profit2.value||0)<0?1:0;lossRes.textContent=lossv.toFixed(3);
+}
+['os','assets1','cash','assets2','profit','revenue','revt','revt1','otherinc','allinc','profit2'].forEach(id=>document.getElementById(id).addEventListener('input',calc));
+function saveBlock(){
+  calc();
+  localStorage.setItem('b_fin',((+osFlag.value*w.os)+(+cashFlag.value*w.cash)+(+marginFlag.value*w.margin)+(+growthFlag.value*w.growth)+(+otherFlag.value*w.other)+(+lossFlag.value*w.loss)).toFixed(6));
+}
+calc();
+</script>
+</body>
+</html>
