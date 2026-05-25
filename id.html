@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Идентификационно-структурный</title>
+<style>
+:root{--bg:#0b1020;--card:#111827;--muted:#94a3b8;--text:#e5e7eb;--acc:#22c55e;--line:#243041}
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,Helvetica,sans-serif;background:linear-gradient(180deg,#0b1020,#111827);color:var(--text)}
+.wrap{max-width:1180px;margin:0 auto;padding:24px}
+.nav{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px}
+.nav a{color:var(--text);text-decoration:none;padding:10px 14px;border:1px solid var(--line);border-radius:12px;background:#0f172a}
+.nav a.active{background:var(--acc);color:#052e16;border-color:transparent;font-weight:700}
+.card{background:rgba(17,24,39,.95);border:1px solid var(--line);border-radius:18px;padding:20px;margin-bottom:16px}
+h1{margin:0 0 8px}
+.muted{color:var(--muted)}
+.row{display:grid;grid-template-columns:1fr 180px 120px;gap:10px;align-items:center;margin:12px 0}
+.row select{width:100%;padding:10px 12px;border-radius:12px;background:#0f172a;color:var(--text);border:1px solid #334155}
+.score{font-weight:700}
+.btn{display:inline-block;margin-top:14px;background:var(--acc);color:#052e16;padding:12px 16px;border-radius:12px;text-decoration:none;font-weight:700}
+@media(max-width:900px){.row{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="nav">
+    <a href="index.html">Главная</a>
+    <a class="active" href="id.html">Идентификационно-структурный</a>
+    <a href="oper.html">Операционно-деловой</a>
+    <a href="fin.html">Финансово-экономический</a>
+    <a href="external.html">Внешние признаки</a>
+    <a href="result.html">Итог</a>
+  </div>
+
+  <section class="card">
+    <h1>Идентификационно-структурный блок</h1>
+    <div class="muted">Каждый индикатор оценивается как 0/1 по наличию критического признака.</div>
+
+    <div class="row"><div>Невозможность установить бенефициара</div><select id="i1"><option value="0">Нет</option><option value="1">Да</option></select><div class="score">0.065</div></div>
+    <div class="row"><div>Иностранное участие из юрисдикции риска</div><select id="i2"><option value="0">Нет</option><option value="1">Да</option></select><div class="score">0.054</div></div>
+    <div class="row"><div>Сложная структура собственности</div><select id="i3"><option value="0">Нет</option><option value="1">Да</option></select><div class="score">0.054</div></div>
+    <div class="row"><div>Массовый руководитель / учредитель</div><select id="i4"><option value="0">Нет</option><option value="1">Да</option></select><div class="score">0.043</div></div>
+    <div class="row"><div>Массовый адрес</div><select id="i5"><option value="0">Нет</option><option value="1">Да</option></select><div class="score">0.043</div></div>
+    <div class="row"><div>Срок существования менее 12 месяцев</div><select id="i6"><option value="0">Нет</option><option value="1">Да</option></select><div class="score">0.041</div></div>
+
+    <a class="btn" href="oper.html" onclick="saveBlock()">Далее</a>
+  </section>
+</div>
+
+<script>
+const w=[0.065,0.054,0.054,0.043,0.043,0.041];
+function saveBlock(){
+  const v=[1,2,3,4,5,6].map(i=>+document.getElementById('i'+i).value);
+  const t=v.reduce((s,x,i)=>s+x*w[i],0);
+  localStorage.setItem('b_id',t.toFixed(6));
+}
+</script>
+</body>
+</html>
