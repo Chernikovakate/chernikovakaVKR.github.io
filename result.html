@@ -5,36 +5,32 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Итог</title>
 <style>
-:root:{
+:root{
   --bg:#ffffff;
-  --card:#f6f9ff;
-  --muted:#5c6f8f;
-  --text:#0f2f6b;
-  --primary:#1f5fbf;
-  --primary-dark:#17479b;
-  --accent:#ED760E;
-  --line:#d6e2f5;
+  --card:#ffffff;
+  --text:#0047AB;
+  --primary:#0047AB;
+  --accent:#F28C28;
+  --line:#d9e3f4;
+  --muted:#6b7fa4;
 }
 *{box-sizing:border-box}
-body{margin:0;font-family:Arial,Helvetica,sans-serif;background:linear-gradient(180deg,#0b1020,#111827);color:var(--text)}
-.wrap{max-width:1180px;margin:0 auto;padding:24px}
+body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:var(--text)}
+.wrap{max-width:1200px;margin:0 auto;padding:24px}
 .nav{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px}
-.nav a{color:var(--text);text-decoration:none;padding:10px 14px;border:1px solid var(--line);border-radius:12px;background:#0f172a}
-.nav a.active{background:var(--acc);color:#052e16;border-color:transparent;font-weight:700}
-.card{background:rgba(17,24,39,.95);border:1px solid var(--line);border-radius:18px;padding:20px}
-h1{margin:0 0 8px}
+.nav a{color:var(--text);text-decoration:none;padding:10px 14px;border:1px solid var(--line);border-radius:12px;background:#fff}
+.nav a.active{background:#fff;color:var(--primary);font-weight:700;border-color:var(--line)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:20px}
+h1{margin:0 0 8px;color:var(--primary)}
 .muted{color:var(--muted)}
-.score{font-size:56px;font-weight:900;margin:12px 0}
-.pill{display:inline-block;padding:10px 14px;border-radius:999px;font-weight:700}
-.low{background:rgba(34,197,94,.15);color:#86efac;border:1px solid rgba(34,197,94,.35)}
-.mid{background:rgba(245,158,11,.15);color:#fcd34d;border:1px solid rgba(245,158,11,.35)}
-.high{background:rgba(239,68,68,.15);color:#fca5a5;border:1px solid rgba(239,68,68,.35)}
-.bar{height:16px;background:#0f172a;border:1px solid #334155;border-radius:999px;overflow:hidden;margin-top:16px}
-.bar>div{height:100%;width:0;background:linear-gradient(90deg,#22c55e,#f59e0b,#ef4444);transition:width .3s ease}
+.score{font-size:56px;font-weight:900;margin:12px 0;color:var(--primary)}
+.pill{display:inline-block;padding:10px 14px;border-radius:999px;font-weight:700;background:#eef4ff;color:var(--primary);border:1px solid var(--line)}
+.bar{height:16px;background:#fff;border:1px solid var(--line);border-radius:999px;overflow:hidden;margin-top:16px}
+.bar>div{height:100%;width:0;background:linear-gradient(90deg,var(--primary),var(--accent));transition:width .3s ease}
 table{width:100%;border-collapse:collapse;margin-top:18px}
-th,td{border-bottom:1px solid var(--line);padding:10px 8px;text-align:left}
-th{color:#cbd5e1}
-.btn{display:inline-block;margin-top:14px;background:#22c55e;color:#052e16;padding:12px 16px;border-radius:12px;text-decoration:none;font-weight:700}
+th,td{border-bottom:1px solid var(--line);padding:10px 8px;text-align:left;color:var(--text)}
+th{color:var(--primary)}
+.btn{display:inline-block;margin-top:14px;background:var(--accent);color:#fff;padding:12px 16px;border-radius:12px;text-decoration:none;font-weight:700;border:none}
 </style>
 </head>
 <body onload="calc()">
@@ -50,9 +46,9 @@ th{color:#cbd5e1}
 
   <section class="card">
     <h1>Интегральный показатель R*</h1>
-    <div class="muted">Итог считается как сумма вкладов блоков. При необходимости здесь можно добавить нормализацию и деление на максимальный вес.</div>
+    <div class="muted">Итог считается как сумма вкладов блоков.</div>
     <div class="score" id="total">0.000</div>
-    <div id="level" class="pill low">Низкий</div>
+    <div id="level" class="pill">Низкий</div>
     <div class="bar"><div id="fill"></div></div>
     <div class="muted" id="desc" style="margin-top:12px"></div>
 
@@ -60,7 +56,7 @@ th{color:#cbd5e1}
       <thead><tr><th>Диапазон</th><th>Уровень риска</th><th>Интерпретация</th></tr></thead>
       <tbody>
         <tr><td>0.00 <= R* < 0.25</td><td>Низкий</td><td>Стандартный режим проверки</td></tr>
-        <tr><td>0.25 <= R* < 0.50</td><td>Умеренный</td><td>Углубленная проверка отдельных параметров</td></tr>
+        <tr><td>0.25 <= R* < 0.50</td><td>Умеренный</td><td>Углубленная проверка</td></tr>
         <tr><td>0.50 <= R* < 0.75</td><td>Повышенный</td><td>Усиленный комплаенс-контроль</td></tr>
         <tr><td>0.75 <= R* <= 1.00</td><td>Высокий</td><td>Субъект повышенного внимания</td></tr>
       </tbody>
@@ -76,11 +72,13 @@ function calc(){
   const total=v.reduce((a,b)=>a+b,0);
   document.getElementById('total').textContent=total.toFixed(6);
   const level=document.getElementById('level'),desc=document.getElementById('desc'),fill=document.getElementById('fill');
-  let cls='low',txt='Низкий',d='Ограниченное количество риск-индикаторов.';
-  if(total>=0.75){cls='high';txt='Высокий';d='Концентрация сильных индикаторов.'}
-  else if(total>=0.50){cls='mid';txt='Повышенный';d='Совокупность значимых факторов риска.'}
-  else if(total>=0.25){cls='mid';txt='Умеренный';d='Выявлены отдельные настораживающие признаки.'}
-  level.className='pill '+cls; level.textContent=txt; desc.textContent=d; fill.style.width=Math.min(total,1)*100+'%';
+  let txt='Низкий',d='Ограниченное количество риск-индикаторов.';
+  if(total>=0.75){txt='Высокий';d='Концентрация сильных индикаторов.'}
+  else if(total>=0.50){txt='Повышенный';d='Совокупность значимых факторов риска.'}
+  else if(total>=0.25){txt='Умеренный';d='Выявлены отдельные настораживающие признаки.'}
+  level.textContent=txt;
+  desc.textContent=d;
+  fill.style.width=Math.min(total,1)*100+'%';
 }
 </script>
 </body>
