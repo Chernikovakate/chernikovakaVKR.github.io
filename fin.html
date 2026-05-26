@@ -5,40 +5,30 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Финансово-экономический</title>
 <style>
-:root
-  -{
- --bg:#ffffff;
+:root{
+  --bg:#ffffff;
   --card:#ffffff;
-  --muted:#6c7f9b;
-  --text:#1f5fbf;
-  --primary:#1f5fbf;
-  --primary-dark:#17479b;
-  --accent:#f28c28;
+  --text:#0047AB;
+  --primary:#0047AB;
+  --accent:#F28C28;
   --line:#d9e3f4;
+  --muted:#6b7fa4;
 }
 *{box-sizing:border-box}
-body{margin:0;
-  font-family:Arial,Helvetica,sans-serif;
-  background:var(--bg);
-  color:var(--text);}
-.wrap{max-width:1180px;margin:0 auto;padding:24px}
+body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:var(--text)}
+.wrap{max-width:1200px;margin:0 auto;padding:24px}
 .nav{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px}
-.nav a{background:#ffffff;
-  color:var(--text);
-  border:1px solid var(--line);;border-radius:12px;background:#0f172a}
-.nav a.active{background:#ffffff;
-  color:var(--primary);
-  border-color:var(--line);font-weight:700}
-.card{ background:var(--card);
-  border:1px solid var(--line);border-radius:18px;padding:20px;margin-bottom:16px}
-h1{margin:0 0 8px}
-.muted{ color:var(--text)}
-.block{margin-top:14px;padding:14px;border:1px solid #243041;border-radius:16px;background:#0f172a}
+.nav a{color:var(--text);text-decoration:none;padding:10px 14px;border:1px solid var(--line);border-radius:12px;background:#fff}
+.nav a.active{background:#fff;color:var(--primary);font-weight:700;border-color:var(--line)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:20px;margin-bottom:16px}
+h1{margin:0 0 8px;color:var(--primary)}
+.muted{color:var(--muted)}
+.block{margin-top:14px;padding:14px;border:1px solid var(--line);border-radius:16px;background:#fff}
 .row{display:grid;grid-template-columns:1.5fr 1fr 1fr 120px;gap:10px;align-items:center;margin:10px 0}
-.row input,.row select{width:100%;padding:10px 12px;border-radius:12px;background:#111827;color:var(--text);border:1px solid #334155}
-.small{font-size:13px;color:#94a3b8}
-.score{font-weight:700}
-.btn{display:inline-block;margin-top:14px;background:var(--acc);color:#052e16;padding:12px 16px;border-radius:12px;text-decoration:none;font-weight:700}
+.row input,.row select{width:100%;padding:10px 12px;border-radius:12px;background:#fff;color:var(--primary);border:1px solid var(--line)}
+.small{font-size:13px;color:var(--muted)}
+.score{font-weight:700;color:var(--primary)}
+.btn{display:inline-block;margin-top:14px;background:var(--accent);color:#fff;padding:12px 16px;border-radius:12px;text-decoration:none;font-weight:700;border:none}
 @media(max-width:900px){.row{grid-template-columns:1fr}}
 </style>
 </head>
@@ -125,12 +115,12 @@ h1{margin:0 0 8px}
 const w={os:0.039,cash:0.031,margin:0.031,growth:0.024,other:0.039,loss:0.036};
 function pct(a,b){a=+a;b=+b;if(!isFinite(a)||!isFinite(b)||b===0)return 0;return a/b*100}
 function calc(){
-  const osv=pct(os.value,assets1.value);osRes.textContent=osv.toFixed(3);
-  const cashv=pct(cash.value,assets2.value);cashRes.textContent=cashv.toFixed(3);
-  const marginv=pct(profit.value,revenue.value);marginRes.textContent=marginv.toFixed(3);
-  const growthv=((+revt.value||0)/((+revt1.value||0)||1)-1)*100;growthRes.textContent=growthv.toFixed(3);
-  const otherv=pct(otherinc.value,allinc.value);otherRes.textContent=otherv.toFixed(3);
-  const lossv=(+profit2.value||0)<0?1:0;lossRes.textContent=lossv.toFixed(3);
+  osRes.textContent=pct(os.value,assets1.value).toFixed(3);
+  cashRes.textContent=pct(cash.value,assets2.value).toFixed(3);
+  marginRes.textContent=pct(profit.value,revenue.value).toFixed(3);
+  growthRes.textContent=(((+revt.value||0)/((+revt1.value||0)||1)-1)*100).toFixed(3);
+  otherRes.textContent=pct(otherinc.value,allinc.value).toFixed(3);
+  lossRes.textContent=((+profit2.value||0)<0?1:0).toFixed(3);
 }
 ['os','assets1','cash','assets2','profit','revenue','revt','revt1','otherinc','allinc','profit2'].forEach(id=>document.getElementById(id).addEventListener('input',calc));
 function saveBlock(){
