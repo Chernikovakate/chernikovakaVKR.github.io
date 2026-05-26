@@ -5,30 +5,30 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ПОД/ФТ — главная</title>
 <style>
-:root{:root
+:root{
   --bg:#ffffff;
-  --card:#f4f8ff;
-  --muted:#5f6f89;
-  --text:#111111;
-  --primary:#1f5fbf;
-  --primary-dark:#16458f;
-  --accent:#f28c28;
-  --line:#c9d8f2;
+  --card:#ffffff;
+  --text:#0047AB;
+  --primary:#0047AB;
+  --accent:#F28C28;
+  --line:#d9e3f4;
+  --muted:#6b7fa4;
 }
 *{box-sizing:border-box}
-body{margin:0;font-family:Arial,Helvetica,sans-serif;background:linear-gradient(180deg,#0b1020,#111827);color:var(--text)}
-.wrap{max-width:1180px;margin:0 auto;padding:24px}
+body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:var(--text)}
+.wrap{max-width:1200px;margin:0 auto;padding:24px}
 .nav{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px}
-.nav a{color:var(--text);text-decoration:none;padding:10px 14px;border:1px solid var(--line);border-radius:12px;background:#0f172a}
-.nav a.active{background:var(--acc);color:#052e16;border-color:transparent;font-weight:700}
-.hero,.card{background:#111827;border:1px solid var(--line);border-radius:18px;padding:20px}
+.nav a{color:var(--text);text-decoration:none;padding:10px 14px;border:1px solid var(--line);border-radius:12px;background:#fff}
+.nav a.active{background:#fff;color:var(--primary);font-weight:700;border-color:var(--line)}
+.hero,.card,.block{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:20px}
 .hero{margin-bottom:18px}
-h1{margin:0 0 10px;font-size:30px}
-.muted{color:var(--muted);line-height:1.6}
+h1{margin:0 0 10px;font-size:30px;color:var(--primary)}
+h2,h3,p,div,span,label{color:var(--text)}
+.muted{color:var(--muted)}
 .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
-.item{background:#0f172a;border:1px solid var(--line);border-radius:16px;padding:16px}
-.item h3{margin:0 0 8px}
-.btn{display:inline-block;margin-top:14px;background:var(--acc);color:#052e16;padding:12px 16px;border-radius:12px;text-decoration:none;font-weight:700}
+.item{background:#fff;border:1px solid var(--line);border-radius:16px;padding:16px}
+.btn{display:inline-block;margin-top:14px;background:var(--accent);color:#fff;padding:12px 16px;border-radius:12px;text-decoration:none;font-weight:700;border:none}
+.btn:hover{opacity:.95}
 @media(max-width:900px){.grid{grid-template-columns:1fr}}
 </style>
 </head>
@@ -45,9 +45,7 @@ h1{margin:0 0 10px;font-size:30px}
 
   <section class="hero">
     <h1>Экспресс-оценка риска ПОД/ФТ</h1>
-    <div class="muted">
-      Сайт считает риск по твоим индикаторам, автоматически вычисляет формулы, сравнивает их с критическими значениями и собирает итоговый показатель R*.
-    </div>
+    <div class="muted">Сайт считает риск по твоим индикаторам, автоматически вычисляет формулы и собирает итоговый показатель R*.</div>
     <a class="btn" href="id.html">Начать</a>
   </section>
 
