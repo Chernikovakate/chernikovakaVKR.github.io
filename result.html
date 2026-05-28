@@ -1,214 +1,105 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Итог проверки</title>
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #f6f8fc;
-      color: #173f6f;
-    }
-    .wrap {
-      max-width: 900px;
-      margin: 40px auto;
-      padding: 24px;
-      background: #fff;
-      border-radius: 18px;
-      box-shadow: 0 6px 20px rgba(0,0,0,0.08);
-    }
-    h1 {
-      margin-top: 0;
-      color: #114d91;
-    }
-    .card {
-      padding: 20px;
-      border-radius: 16px;
-      background: #f3f7ff;
-      margin-top: 20px;
-    }
-    .row {
-      display: flex;
-      justify-content: space-between;
-      gap: 16px;
-      padding: 12px 0;
-      border-bottom: 1px solid #dbe4f0;
-    }
-    .row:last-child {
-      border-bottom: none;
-    }
-    .label {
-      font-weight: 700;
-    }
-    .value {
-      text-align: right;
-    }
-
-    .risk-low { color: #1f8a3b; font-weight: 700; }
-    .risk-medium { color: #c97a00; font-weight: 700; }
-    .risk-high { color: #c40000; font-weight: 700; }
-    .risk-critical { color: #8b0000; font-weight: 700; }
-
-    .scale-title {
-      margin: 0 0 14px;
-      color: #114d91;
-      font-size: 22px;
-    }
-
-    .scale-bar {
-      display: flex;
-      width: 100%;
-      height: 18px;
-      border-radius: 999px;
-      overflow: hidden;
-      margin: 16px 0 18px;
-      box-shadow: inset 0 0 0 1px rgba(0,0,0,0.08);
-    }
-    .seg1 { width: 25%; background: #3dbb5d; }
-    .seg2 { width: 25%; background: #f2c94c; }
-    .seg3 { width: 25%; background: #f2994a; }
-    .seg4 { width: 25%; background: #eb5757; }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 16px;
-    }
-    th, td {
-      text-align: left;
-      padding: 12px 10px;
-      border-bottom: 1px solid #e2e8f0;
-      vertical-align: top;
-    }
-    th {
-      background: #f3f7ff;
-      color: #114d91;
-    }
-
-    .actions {
-      display: flex;
-      gap: 14px;
-      margin-top: 22px;
-      flex-wrap: wrap;
-    }
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      min-width: 220px;
-      height: 54px;
-      padding: 0 24px;
-      border-radius: 16px;
-      text-decoration: none;
-      font-weight: 700;
-      color: #fff;
-      background: #f39a2e;
-      box-shadow: 0 6px 14px rgba(243, 154, 46, 0.28);
-      transition: transform 0.15s ease, opacity 0.15s ease;
-    }
-    .btn:hover {
-      transform: translateY(-1px);
-      opacity: 0.95;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Итог</title>
+<style>
+:root{
+  --bg:#ffffff;
+  --card:#ffffff;
+  --text:#0047AB;
+  --primary:#0047AB;
+  --accent:#F28C28;
+  --line:#d9e3f4;
+  --muted:#6b7fa4;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:var(--text)}
+.wrap{max-width:1200px;margin:0 auto;padding:24px}
+.nav{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px}
+.nav a{color:var(--text);text-decoration:none;padding:10px 14px;border:1px solid var(--line);border-radius:12px;background:#fff}
+.nav a.active{background:#fff;color:var(--primary);font-weight:700;border-color:var(--line)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:20px}
+h1{margin:0 0 8px;color:var(--primary)}
+.muted{color:var(--muted)}
+.score{font-size:56px;font-weight:900;margin:12px 0;color:var(--primary)}
+.pill{display:inline-block;padding:10px 14px;border-radius:999px;font-weight:700;background:#eef4ff;color:var(--primary);border:1px solid var(--line)}
+.bar{height:16px;background:#fff;border:1px solid var(--line);border-radius:999px;overflow:hidden;margin-top:16px}
+.bar>div{height:100%;width:0;background:linear-gradient(90deg,var(--primary),var(--accent));transition:width .3s ease}
+table{width:100%;border-collapse:collapse;margin-top:18px}
+th,td{border-bottom:1px solid var(--line);padding:10px 8px;text-align:left;color:var(--text)}
+th{color:var(--primary)}
+.btns{display:flex;gap:12px;flex-wrap:wrap;margin-top:14px}
+.btn{display:inline-flex;align-items:center;justify-content:center;min-width:220px;height:54px;background:var(--accent);color:#fff;padding:0 18px;border-radius:12px;text-decoration:none;font-weight:700;border:none}
+</style>
 </head>
-<body>
-  <div class="wrap">
-    <h1>Итог проверки</h1>
-
-    <div class="card">
-      <div class="row">
-        <div class="label">Организация</div>
-        <div class="value" id="orgName">Без названия</div>
-      </div>
-      <div class="row">
-        <div class="label">ОПФ</div>
-        <div class="value" id="opf">—</div>
-      </div>
-      <div class="row">
-        <div class="label">Интегральный показатель</div>
-        <div class="value" id="score">—</div>
-      </div>
-      <div class="row">
-        <div class="label">Уровень риска</div>
-        <div class="value" id="risk">—</div>
-      </div>
-    </div>
-
-    <div class="card">
-      <h2 class="scale-title">Справочник по уровню риска</h2>
-      <div class="scale-bar">
-        <div class="seg1"></div>
-        <div class="seg2"></div>
-        <div class="seg3"></div>
-        <div class="seg4"></div>
-      </div>
-      <table>
-        <thead>
-          <tr>
-            <th>Диапазон</th>
-            <th>Уровень риска</th>
-            <th>Характеристика</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>0,00 – 0,25</td>
-            <td>Низкий</td>
-            <td>Минимальная выраженность признаков риска</td>
-          </tr>
-          <tr>
-            <td>0,25 – 0,50</td>
-            <td>Умеренный</td>
-            <td>Есть отдельные признаки, требующие внимания</td>
-          </tr>
-          <tr>
-            <td>0,50 – 0,75</td>
-            <td>Высокий</td>
-            <td>Существенные признаки повышенного риска</td>
-          </tr>
-          <tr>
-            <td>0,75 – 1,00</td>
-            <td>Критический</td>
-            <td>Очень высокий уровень риска</td>
-          </tr>
-        </tbody>
-      </table>
-
-      <div class="actions">
-        <a href="index.html" class="btn">На главную</a>
-        <a href="results.html" class="btn">Результаты проверок</a>
-      </div>
-    </div>
+<body onload="calc()">
+<div class="wrap">
+  <div class="nav">
+    <a href="index.html">Главная</a>
+    <a href="id.html">Идентификационно-структурный</a>
+    <a href="oper.html">Операционно-деловой</a>
+    <a href="fin.html">Финансово-экономический</a>
+    <a href="external.html">Внешние признаки</a>
+    <a class="active" href="result.html">Итог</a>
   </div>
 
-  <script>
-    const data = JSON.parse(localStorage.getItem('resultData') || '{}');
+  <section class="card">
+    <h1 id="title">Уровень риска легализации преступных доходов</h1>
 
-    const orgName = data.orgName || data.name || 'Без названия';
-    document.getElementById('orgName').textContent = orgName;
-    document.getElementById('opf').textContent = data.opf || '—';
-    document.getElementById('score').textContent = data.score ?? '—';
+    <div class="score" id="total">0.000</div>
+    <div id="level" class="pill">Низкий</div>
+    <div class="bar"><div id="fill"></div></div>
+    <div class="muted" id="desc" style="margin-top:12px"></div>
 
-    const score = Number(data.score);
-    let risk = data.risk || '—';
+    <table>
+      <thead><tr><th>Диапазон</th><th>Уровень риска</th><th>Интерпретация</th></tr></thead>
+      <tbody>
+        <tr><td>0.00 <= R* < 0.25</td><td>Низкий</td><td>Стандартный режим проверки</td></tr>
+        <tr><td>0.25 <= R* < 0.50</td><td>Умеренный</td><td>Углубленная проверка</td></tr>
+        <tr><td>0.50 <= R* < 0.75</td><td>Повышенный</td><td>Усиленный комплаенс-контроль</td></tr>
+        <tr><td>0.75 <= R* <= 1.00</td><td>Высокий</td><td>Субъект повышенного внимания</td></tr>
+      </tbody>
+    </table>
 
-    if (Number.isFinite(score)) {
-      if (score < 0.25) risk = 'Низкий риск';
-      else if (score < 0.5) risk = 'Умеренный риск';
-      else if (score < 0.75) risk = 'Высокий риск';
-      else risk = 'Критический риск';
-    }
+    <div class="btns">
+      <a class="btn" href="index.html">На главную</a>
+      <a class="btn" href="results.html">Результаты проверок</a>
+    </div>
+  </section>
+</div>
 
-    const riskEl = document.getElementById('risk');
-    riskEl.textContent = risk;
+<script>
+function getCompanyName(){
+  return localStorage.getItem('company_name')
+      || localStorage.getItem('orgName')
+      || localStorage.getItem('clientName')
+      || '';
+}
 
-    if (risk.toLowerCase().includes('низк')) riskEl.className = 'value risk-low';
-    else if (risk.toLowerCase().includes('умерен')) riskEl.className = 'value risk-medium';
-    else if (risk.toLowerCase().includes('выс')) riskEl.className = 'value risk-high';
-    else if (risk.toLowerCase().includes('крит')) riskEl.className = 'value risk-critical';
-  </script>
+function calc(){
+  const name = getCompanyName().trim();
+  document.getElementById('title').textContent =
+    'Уровень риска легализации преступных доходов ' + (name || 'Без названия');
+
+  const v=['b_id','b_oper','b_fin','b_ext'].map(k=>+localStorage.getItem(k)||0);
+  const total=v.reduce((a,b)=>a+b,0);
+  document.getElementById('total').textContent=total.toFixed(6);
+
+  const level=document.getElementById('level'),
+        desc=document.getElementById('desc'),
+        fill=document.getElementById('fill');
+
+  let txt='Низкий',d='Ограниченное количество риск-индикаторов.';
+  if(total>=0.75){txt='Высокий';d='Концентрация сильных индикаторов.'}
+  else if(total>=0.50){txt='Повышенный';d='Совокупность значимых факторов риска.'}
+  else if(total>=0.25){txt='Умеренный';d='Выявлены отдельные настораживающие признаки.'}
+
+  level.textContent=txt;
+  desc.textContent=d;
+  fill.style.width=Math.min(total,1)*100+'%';
+}
+</script>
 </body>
 </html>
