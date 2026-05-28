@@ -45,15 +45,32 @@
     .value {
       text-align: right;
     }
+
     .risk-low { color: #1f8a3b; font-weight: 700; }
     .risk-medium { color: #c97a00; font-weight: 700; }
     .risk-high { color: #c40000; font-weight: 700; }
+    .risk-critical { color: #8b0000; font-weight: 700; }
 
     .scale-title {
       margin: 0 0 14px;
       color: #114d91;
       font-size: 22px;
     }
+
+    .scale-bar {
+      display: flex;
+      width: 100%;
+      height: 18px;
+      border-radius: 999px;
+      overflow: hidden;
+      margin: 16px 0 18px;
+      box-shadow: inset 0 0 0 1px rgba(0,0,0,0.08);
+    }
+    .seg1 { width: 25%; background: #3dbb5d; }
+    .seg2 { width: 25%; background: #f2c94c; }
+    .seg3 { width: 25%; background: #f2994a; }
+    .seg4 { width: 25%; background: #eb5757; }
+
     table {
       width: 100%;
       border-collapse: collapse;
@@ -63,6 +80,7 @@
       text-align: left;
       padding: 12px 10px;
       border-bottom: 1px solid #e2e8f0;
+      vertical-align: top;
     }
     th {
       background: #f3f7ff;
@@ -95,6 +113,12 @@
 
     <div class="card">
       <h2 class="scale-title">Справочник по уровню риска</h2>
+      <div class="scale-bar">
+        <div class="seg1"></div>
+        <div class="seg2"></div>
+        <div class="seg3"></div>
+        <div class="seg4"></div>
+      </div>
       <table>
         <thead>
           <tr>
@@ -136,13 +160,23 @@
     document.getElementById('opf').textContent = data.opf || '—';
     document.getElementById('score').textContent = data.score ?? '—';
 
+    const score = Number(data.score);
+    let risk = data.risk || '—';
+
+    if (Number.isFinite(score)) {
+      if (score < 0.25) risk = 'Низкий риск';
+      else if (score < 0.5) risk = 'Умеренный риск';
+      else if (score < 0.75) risk = 'Высокий риск';
+      else risk = 'Критический риск';
+    }
+
     const riskEl = document.getElementById('risk');
-    const risk = data.risk || '—';
     riskEl.textContent = risk;
 
     if (risk.toLowerCase().includes('низк')) riskEl.className = 'value risk-low';
     else if (risk.toLowerCase().includes('умерен')) riskEl.className = 'value risk-medium';
     else if (risk.toLowerCase().includes('выс')) riskEl.className = 'value risk-high';
+    else if (risk.toLowerCase().includes('крит')) riskEl.className = 'value risk-critical';
   </script>
 </body>
 </html>
