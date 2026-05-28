@@ -16,18 +16,16 @@ h1{margin:0 0 8px;color:var(--primary)}
 .field{display:flex;flex-direction:column;gap:8px}
 label{font-weight:700;color:var(--primary)}
 input,select{padding:11px 12px;border:1px solid var(--line);border-radius:12px;color:var(--primary);background:#fff;font-size:15px}
-.actions{display:flex;gap:12px;align-items:center;margin-top:16px}
 .btn{display:inline-block;background:var(--accent);color:#fff;padding:12px 16px;border-radius:12px;text-decoration:none;font-weight:700;border:none;cursor:pointer}
-.btn.secondary{background:#fff;color:var(--primary);border:1px solid var(--line)}
 .hidden{display:none}
-@media(max-width:800px){.row{grid-template-columns:1fr}.actions{flex-direction:column;align-items:stretch}}
+@media(max-width:800px){.row{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
 <div class="wrap">
   <section class="card">
     <h1>Карточка клиента</h1>
-    <div class="muted">Сначала заполни наименование и организационно-правовую форму клиента. После сохранения можно перейти к индикаторам.</div>
+    <div class="muted">Заполни сведения о клиенте и нажми «Далее» — после этого откроются блоки индикаторов по порядку.</div>
 
     <div class="row">
       <div class="field">
@@ -58,10 +56,7 @@ input,select{padding:11px 12px;border:1px solid var(--line);border-radius:12px;c
       </div>
     </div>
 
-    <div class="actions">
-      <button class="btn" onclick="saveClient()">Сохранить</button>
-      <a class="btn secondary" href="id.html" onclick="saveAndNext(event)">Далее</a>
-    </div>
+    <a class="btn" href="id.html" onclick="saveClient()">Далее</a>
   </section>
 </div>
 
@@ -76,7 +71,7 @@ function updateForms(){
   const s=document.getElementById('opfSpecific');
   s.innerHTML='';
   if(!g){
-    s.innerHTML='<option value="">Необходимо сначала выбрать категорию</option>';
+    s.innerHTML='<option value="">Сначала выбери категорию</option>';
     document.getElementById('opfOtherWrap').classList.add('hidden');
     return;
   }
@@ -100,11 +95,6 @@ function saveClient(){
     opfOther:document.getElementById('opfOther').value.trim()
   };
   localStorage.setItem('client_card', JSON.stringify(data));
-}
-function saveAndNext(e){
-  e.preventDefault();
-  saveClient();
-  location.href='id.html';
 }
 </script>
 </body>
