@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Результаты проверок</title>
+<style>
+:root{--bg:#ffffff;--card:#ffffff;--text:#0047AB;--primary:#0047AB;--accent:#F28C28;--line:#d9e3f4;--muted:#6b7fa4}
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:var(--text)}
+.wrap{max-width:1200px;margin:0 auto;padding:24px}
+.nav{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px}
+.nav a{color:var(--text);text-decoration:none;padding:10px 14px;border:1px solid var(--line);border-radius:12px;background:#fff}
+.nav a.active{font-weight:700}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:20px;margin-bottom:16px}
+h1{margin:0 0 8px;color:var(--primary)}
+.muted{color:var(--muted)}
+.list{display:grid;grid-template-columns:1fr;gap:12px;margin-top:16px}
+.row{border:1px solid var(--line);border-radius:16px;padding:14px;background:#fff;display:flex;justify-content:space-between;gap:16px;align-items:flex-start;flex-wrap:wrap}
+.title{font-weight:700;color:var(--primary);font-size:18px}
+.meta{color:var(--muted);font-size:14px;margin-top:4px}
+.score{font-size:22px;font-weight:700;color:var(--primary)}
+.level{display:inline-block;margin-top:6px;padding:6px 10px;border-radius:999px;border:1px solid var(--line);color:var(--primary);background:#eef4ff;font-size:13px}
+.btn{background:var(--accent);color:#fff;border:none;border-radius:12px;padding:10px 14px;font-weight:700;cursor:pointer;text-decoration:none;display:inline-block}
+.btn.del{background:#fff;color:#c0392b;border:1px solid #f0c0bd}
+.top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.small{font-size:14px;color:var(--muted)}
+</style></head>
+<body>
+<div class="wrap">
+  <div class="nav">
+    <a href="index.html">Главная</a>
+    <a href="client.html">Карточка клиента</a>
+    <a href="id.html">Идентификационный блок</a>
+    <a href="oper.html">Операционный блок</a>
+    <a href="fin.html">Финансовый блок</a>
+    <a href="external.html">Внешний блок</a>
+    <a class="active" href="results.html">Результаты проверок</a>
+    <a href="result.html">Итог</a>
+  </div>
+
+  <section class="card">
+    <div class="top">
+      <div>
+        <h1>Результаты проверок</h1>
+        <div class="muted">Здесь сохраняются все выполненные проверки. Записи видны всем пользователям и могут быть удалены вручную.</div>
+      </div>
+      <button class="btn" onclick="clearAll()">Удалить все</button>
+    </div>
+    <div id="list" class="list"></div>
+  </section>
+</div>
+
+<script>
+function levelText(t){if(t>=0.75)return 'Высокий риск';if(t>=0.5)return 'Повышенный риск';if(t>=0.25)return 'Умеренный риск';return 'Низкий риск'}
+function esc(s){return (s||'').replace(/[&<>\"]+/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;'}[m]))}
+function load(){
+  const data=JSON.parse(localStorage.getItem('aml_results')||'[]');
+  const list=document.getElementById('list');
+  if(!data.length){list.innerHTML='<div class="muted">Пока нет сохранённых результатов.</div>';return}
+  list.innerHTML=data.map((x,i)=>`<div class="row"><div><div class="title">${esc(x.company||'Без названия')}</div><div class="meta">${esc(x.opf||'ОПФ не указана')} · ${new Date(x.date).toLocaleString('ru-RU')}</div><div class="level">${levelText(+x.total||0)}</div></div><div style="text-align:right"><div class="score">${Number(x.total||0).toFixed(6)}</div><button class="btn del" onclick="delOne(${i})">Удалить</button></div></div>`).join('')
+}
+function delOne(i){
+  const data=JSON.parse(localStorage.getItem('aml_results')||'[]');
+  data.splice(i,1);
+  localStorage.setItem('aml_results',JSON.stringify(data));
+  load();
+}
+function clearAll(){
+  localStorage.removeItem('aml_results');
+  load();
+}
+load();
+</script>
+</body></html>
