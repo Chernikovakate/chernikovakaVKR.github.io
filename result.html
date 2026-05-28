@@ -61,12 +61,14 @@ th{color:var(--primary)}
     </table>
 
     <a class="btn" href="index.html">На главную</a>
+    <a class="btn" href="results.html" style="margin-left:12px;">Результаты проверок</a>
   </section>
 </div>
 
 <script>
 function calc(){
-  const name = localStorage.getItem('company_name') || localStorage.getItem('orgName') || localStorage.getItem('clientName') || '';
+  const client = JSON.parse(localStorage.getItem('client_card') || '{}');
+  const name = client.company || '';
   document.getElementById('title').textContent = 'Уровень риска легализации преступных доходов ' + (name || 'Без названия');
 
   const v=['b_id','b_oper','b_fin','b_ext'].map(k=>+localStorage.getItem(k)||0);
@@ -84,5 +86,3 @@ function calc(){
 </script>
 </body>
 </html>
-
-
