@@ -8,82 +8,155 @@
     body {
       margin: 0;
       font-family: Arial, sans-serif;
-      background: #f6f8fc;
+      background: #f5f8fc;
       color: #173f6f;
     }
     .wrap {
-      max-width: 900px;
-      margin: 40px auto;
-      padding: 24px;
+      max-width: 980px;
+      margin: 32px auto;
+      padding: 0 16px;
+    }
+    .card {
       background: #fff;
       border-radius: 18px;
       box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+      padding: 24px;
+      margin-bottom: 18px;
     }
     h1 {
-      margin-top: 0;
+      margin: 0 0 18px;
       color: #114d91;
+      font-size: 28px;
     }
-    .card {
-      padding: 20px;
-      border-radius: 16px;
-      background: #f3f7ff;
-      margin-top: 20px;
+    .result {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px 24px;
+      align-items: start;
     }
-    .row {
-      display: flex;
-      justify-content: space-between;
-      gap: 16px;
-      padding: 12px 0;
+    .item {
+      padding: 14px 0;
       border-bottom: 1px solid #dbe4f0;
-    }
-    .row:last-child {
-      border-bottom: none;
     }
     .label {
       font-weight: 700;
+      margin-bottom: 6px;
     }
     .value {
-      text-align: right;
+      font-size: 20px;
     }
     .risk-low { color: #1f8a3b; font-weight: 700; }
     .risk-medium { color: #c97a00; font-weight: 700; }
     .risk-high { color: #c40000; font-weight: 700; }
+    .scale-title {
+      margin: 0 0 14px;
+      color: #114d91;
+      font-size: 22px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 16px;
+    }
+    th, td {
+      text-align: left;
+      padding: 12px 10px;
+      border-bottom: 1px solid #e2e8f0;
+    }
+    th {
+      background: #f3f7ff;
+      color: #114d91;
+    }
+    .org {
+      grid-column: 1 / -1;
+    }
+    @media (max-width: 700px) {
+      .result {
+        grid-template-columns: 1fr;
+      }
+    }
   </style>
 </head>
 <body>
   <div class="wrap">
-    <h1>Итог проверки</h1>
+    <div class="card">
+      <h1>Итог проверки</h1>
+      <div class="result">
+        <div class="item org">
+          <div class="label">Организация</div>
+          <div class="value" id="orgName">Без названия</div>
+        </div>
+        <div class="item">
+          <div class="label">Интегральный показатель</div>
+          <div class="value" id="score">—</div>
+        </div>
+        <div class="item">
+          <div class="label">Уровень риска</div>
+          <div class="value" id="risk">—</div>
+        </div>
+      </div>
+    </div>
 
     <div class="card">
-      <div class="row">
-        <div class="label">Организация</div>
-        <div class="value" id="orgName">Без названия</div>
-      </div>
-      <div class="row">
-        <div class="label">Интегральный показатель</div>
-        <div class="value" id="score">—</div>
-      </div>
-      <div class="row">
-        <div class="label">Уровень риска</div>
-        <div class="value" id="risk">—</div>
-      </div>
+      <h2 class="scale-title">Справочник по уровню риска</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Диапазон</th>
+            <th>Уровень риска</th>
+            <th>Характеристика</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>0,00 – 0,25</td>
+            <td>Низкий</td>
+            <td>Минимальная выраженность признаков риска</td>
+          </tr>
+          <tr>
+            <td>0,25 – 0,50</td>
+            <td>Умеренный</td>
+            <td>Есть отдельные признаки, требующие внимания</td>
+          </tr>
+          <tr>
+            <td>0,50 – 0,75</td>
+            <td>Высокий</td>
+            <td>Существенные признаки повышенного риска</td>
+          </tr>
+          <tr>
+            <td>0,75 – 1,00</td>
+            <td>Критический</td>
+            <td>Очень высокий уровень риска</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
 
   <script>
     const data = JSON.parse(localStorage.getItem('resultData') || '{}');
 
-    document.getElementById('orgName').textContent = data.orgName || 'Без названия';
-    document.getElementById('opf').textContent = data.opf || '—';
-    document.getElementById('score').textContent = data.score ?? '—';
+    const orgName = data.orgName || 'Без названия';
+    const score = Number(data.score);
+    let risk = data.risk || '—';
+
+    document.getElementById('orgName').textContent = orgName;
+    document.getElementById('score').textContent = Number.isFinite(score) ? score.toFixed(6) : '—';
+
+    if (Number.isFinite(score)) {
+      if (score < 0.25) risk = 'Низкий риск';
+      else if (score < 0.50) risk = 'Умеренный риск';
+      else if (score < 0.75) risk = 'Высокий риск';
+      else risk = 'Критический риск';
+    }
 
     const riskEl = document.getElementById('risk');
-    const risk = data.risk || '—';
     riskEl.textContent = risk;
 
     if (risk.toLowerCase().includes('низк')) riskEl.className = 'value risk-low';
-    else if (risk.toLowerCase().includes('сред')) riskEl.className = 'value risk-medium';
-    else if (risk.toLowerCase().includes('выс')) riskEl.className = 'value risk-high';
+    else if (risk.toLowerCase().includes('умерен')) riskEl.className = 'value risk-medium';
+    else if (risk.toLowerCase().includes('высок')) riskEl.className = 'value risk-high';
+    else if (risk.toLowerCase().includes('крит')) riskEl.className = 'value risk-high';
   </script>
 </body>
 </html>
