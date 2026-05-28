@@ -11,21 +11,23 @@ body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:
 .wrap{max-width:1100px;margin:0 auto;padding:24px}
 .card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:20px}
 h1{margin:0 0 8px;color:var(--primary)}
-.muted{color:var(--muted)}
+.muted{color:var(--muted);font-size:14px;line-height:1.35;margin-bottom:18px}
 .row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0}
 .field{display:flex;flex-direction:column;gap:8px}
 label{font-weight:700;color:var(--primary)}
 input,select{padding:11px 12px;border:1px solid var(--line);border-radius:12px;color:var(--primary);background:#fff;font-size:15px}
-.btn{display:inline-block;margin-top:12px;background:var(--accent);color:#fff;padding:12px 16px;border-radius:12px;text-decoration:none;font-weight:700;border:none;cursor:pointer}
+.actions{display:flex;gap:12px;align-items:center;margin-top:16px}
+.btn{display:inline-block;background:var(--accent);color:#fff;padding:12px 16px;border-radius:12px;text-decoration:none;font-weight:700;border:none;cursor:pointer}
+.btn.secondary{background:#fff;color:var(--primary);border:1px solid var(--line)}
 .hidden{display:none}
-@media(max-width:800px){.row{grid-template-columns:1fr}}
+@media(max-width:800px){.row{grid-template-columns:1fr}.actions{flex-direction:column;align-items:stretch}}
 </style>
 </head>
 <body>
 <div class="wrap">
   <section class="card">
     <h1>Карточка клиента</h1>
-    <div class="muted">Сначала заполни наименование и организационно-правовую форму клиента.</div>
+    <div class="muted">Сначала заполни наименование и организационно-правовую форму клиента. После сохранения можно перейти к индикаторам.</div>
 
     <div class="row">
       <div class="field">
@@ -56,48 +58,53 @@ input,select{padding:11px 12px;border:1px solid var(--line);border-radius:12px;c
       </div>
     </div>
 
-    <button class="btn" onclick="saveClient()">Сохранить</button>
+    <div class="actions">
+      <button class="btn" onclick="saveClient()">Сохранить</button>
+      <a class="btn secondary" href="id.html" onclick="saveAndNext(event)">Далее</a>
+    </div>
   </section>
 </div>
 
 <script>
-const forms = {
-  commercial: ['АО','ООО','Товарищество','ИП','Унитарное предприятие (ГУП/МУП)','Производственный кооператив','Прочее'],
-  nonprofit: ['АНО (автономная некоммерческая организация)','Фонд','Общественная организация','Религиозная организация','Ассоциация','Прочее'],
-  bp: ['Без прав юридического лица','Прочее']
+const forms={
+  commercial:['АО','ООО','Товарищество','ИП','Унитарное предприятие (ГУП/МУП)','Производственный кооператив','Прочее'],
+  nonprofit:['АНО (автономная некоммерческая организация)','Фонд','Общественная организация','Религиозная организация','Ассоциация','Прочее'],
+  bp:['Без прав юридического лица','Прочее']
 };
-
-function updateForms() {
-  const g = document.getElementById('opfGroup').value;
-  const s = document.getElementById('opfSpecific');
-  s.innerHTML = '';
-  if (!g) {
-    s.innerHTML = '<option value="">Сначала выбери категорию</option>';
+function updateForms(){
+  const g=document.getElementById('opfGroup').value;
+  const s=document.getElementById('opfSpecific');
+  s.innerHTML='';
+  if(!g){
+    s.innerHTML='<option value="">Необходимо сначала выбрать категорию</option>';
     document.getElementById('opfOtherWrap').classList.add('hidden');
     return;
   }
-  forms[g].forEach(v => {
-    const o = document.createElement('option');
-    o.value = v;
-    o.textContent = v;
+  forms[g].forEach(v=>{
+    const o=document.createElement('option');
+    o.value=v;
+    o.textContent=v;
     s.appendChild(o);
   });
   toggleOther();
 }
-
-function toggleOther() {
-  const v = document.getElementById('opfSpecific').value;
-  document.getElementById('opfOtherWrap').classList.toggle('hidden', v !== 'Прочее');
+function toggleOther(){
+  const v=document.getElementById('opfSpecific').value;
+  document.getElementById('opfOtherWrap').classList.toggle('hidden', v!=='Прочее');
 }
-
-function saveClient() {
-  const company = document.getElementById('company').value.trim();
-  const opfGroup = document.getElementById('opfGroup').value;
-  const opfSpecific = document.getElementById('opfSpecific').value;
-  const opfOther = document.getElementById('opfOther').value.trim();
-  const data = { company, opfGroup, opfSpecific, opfOther };
+function saveClient(){
+  const data={
+    company:document.getElementById('company').value.trim(),
+    opfGroup:document.getElementById('opfGroup').value,
+    opfSpecific:document.getElementById('opfSpecific').value,
+    opfOther:document.getElementById('opfOther').value.trim()
+  };
   localStorage.setItem('client_card', JSON.stringify(data));
-  alert('Сохранено');
+}
+function saveAndNext(e){
+  e.preventDefault();
+  saveClient();
+  location.href='id.html';
 }
 </script>
 </body>
