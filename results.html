@@ -91,26 +91,28 @@ th{color:var(--primary);background:#f7fbff}
 
 <script>
 function getResults(){return JSON.parse(localStorage.getItem('aml_results')||'[]')}
-function esc(s){return (s||'').replace(/[&<>\"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;'}[m]))}
+function esc(s){return (s||'').replace(/[&<>\\"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','\\"':'&quot;'}[m]))}
 function render(){
   const filter=document.getElementById('filterLevel').value;
   const q=document.getElementById('searchName').value.trim().toLowerCase();
-  const data=getResults().filter(x=>{
+  const all=getResults();
+  const data=all.map((x,idx)=>({x,idx})).filter(obj=>{
+    const x=obj.x;
     const okF=filter==='all'||x.code===filter;
     const okQ=!q||String(x.company||'').toLowerCase().includes(q);
     return okF&&okQ;
   });
   const tbody=document.getElementById('tbody');
-  const total=getResults().length;
-  const high=getResults().filter(x=>x.code==='high').length;
-  const medium=getResults().filter(x=>x.code==='medium' || x.code==='veryhigh' || x.code==='high').length;
-  const avg=total?getResults().reduce((s,x)=>s+(+x.total||0),0)/total:0;
+  const total=all.length;
+  const high=all.filter(x=>x.code==='high').length;
+  const medium=all.filter(x=>x.code==='medium' || x.code==='veryhigh' || x.code==='high').length;
+  const avg=total?all.reduce((s,x)=>s+(+x.total||0),0)/total:0;
   document.getElementById('countAll').textContent=total;
   document.getElementById('countHigh').textContent=high;
   document.getElementById('countMedium').textContent=medium;
   document.getElementById('avgScore').textContent=avg.toFixed(6);
   if(!data.length){tbody.innerHTML='<tr><td colspan="5" class="small">Нет записей по выбранному фильтру.</td></tr>';return}
-  tbody.innerHTML=data.map((x,i)=>`<tr><td>${esc(x.company||'')}</td><td>${esc(x.level||'')}</td><td class="right">${Number(x.total||0).toFixed(6)}</td><td>${new Date(x.date).toLocaleString('ru-RU')}</td><td><button class="btn del" onclick="delOne(${i})">Удалить</button></td></tr>`).join('')
+  tbody.innerHTML=data.map(obj=>`<tr><td>${esc(obj.x.company||'')}</td><td>${esc(obj.x.level||'')}</td><td class="right">${Number(obj.x.total||0).toFixed(6)}</td><td>${new Date(obj.x.date).toLocaleString('ru-RU')}</td><td><button class="btn del" onclick="delOne(${obj.idx})">Удалить</button></td></tr>`).join('')
 }
 function delOne(i){
   const arr=getResults();
