@@ -84,6 +84,34 @@ function calc(){
   level.textContent=txt;
   desc.textContent=d;
   fill.style.width=Math.min(total,1)*100+'%';
+  function calc(){
+  const client = JSON.parse(localStorage.getItem('client_card') || '{}');
+  const name = client.company || '';
+  document.getElementById('title').textContent = 'Уровень риска легализации преступных доходов ' + (name || 'Без названия');
+
+  const v=['b_id','b_oper','b_fin','b_ext'].map(k=>+localStorage.getItem(k)||0);
+  const total=v.reduce((a,b)=>a+b,0);
+  document.getElementById('total').textContent=total.toFixed(6);
+  const level=document.getElementById('level'),desc=document.getElementById('desc'),fill=document.getElementById('fill');
+  let txt='Низкий',d='Ограниченное количество риск-индикаторов.';
+  if(total>=0.75){txt='Высокий';d='Концентрация сильных индикаторов.'}
+  else if(total>=0.50){txt='Повышенный';d='Совокупность значимых факторов риска.'}
+  else if(total>=0.25){txt='Умеренный';d='Выявлены отдельные настораживающие признаки.'}
+  level.textContent=txt;
+  desc.textContent=d;
+  fill.style.width=Math.min(total,1)*100+'%';
+
+  const code = total >= 0.75 ? 'high' : total >= 0.50 ? 'veryhigh' : total >= 0.25 ? 'medium' : 'low';
+  const arr = JSON.parse(localStorage.getItem('aml_results') || '[]');
+  arr.push({
+    company: name,
+    level: txt,
+    total: total,
+    code: code,
+    date: new Date().toISOString()
+  });
+  localStorage.setItem('aml_results', JSON.stringify(arr));
+}
 }
 </script>
 </body>
