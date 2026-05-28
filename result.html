@@ -22,7 +22,6 @@ body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:
 .nav a.active{background:#fff;color:var(--primary);font-weight:700;border-color:var(--line)}
 .card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:20px}
 h1{margin:0 0 8px;color:var(--primary)}
-.muted{color:var(--muted)}
 .score{font-size:56px;font-weight:900;margin:12px 0;color:var(--primary)}
 .pill{display:inline-block;padding:10px 14px;border-radius:999px;font-weight:700;background:#eef4ff;color:var(--primary);border:1px solid var(--line)}
 .bar{height:16px;background:#fff;border:1px solid var(--line);border-radius:999px;overflow:hidden;margin-top:16px}
@@ -45,8 +44,7 @@ th{color:var(--primary)}
   </div>
 
   <section class="card">
-    <h1>Интегральный показатель R*</h1>
-    <div class="muted">Итог считается как сумма вкладов блоков.</div>
+    <h1 id="title">Интегральный показатель R*</h1>
     <div class="score" id="total">0.000</div>
     <div id="level" class="pill">Низкий</div>
     <div class="bar"><div id="fill"></div></div>
@@ -68,6 +66,9 @@ th{color:var(--primary)}
 
 <script>
 function calc(){
+  const name = localStorage.getItem('company_name') || localStorage.getItem('orgName') || localStorage.getItem('clientName') || '';
+  document.getElementById('title').textContent = 'Уровень риска легализации преступных доходов ' + (name || 'Без названия');
+
   const v=['b_id','b_oper','b_fin','b_ext'].map(k=>+localStorage.getItem(k)||0);
   const total=v.reduce((a,b)=>a+b,0);
   document.getElementById('total').textContent=total.toFixed(6);
@@ -85,6 +86,3 @@ function calc(){
 </html>
 
 
-Что добавить в этот код: чтобы было 2 кнопки оранжевые: на главную и результаты проверок. И чтобы в заголовке подтягивал название вместо   <h1>Уровень риска легализации преступных доходов *название организации*</h1>
-*название организации* - должно подтягиваться из заполнения карточки клиента
-    <div class="muted">Итог считается как сумма вкладов блоков.</div> - это вообще убери
