@@ -5,81 +5,131 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Итог</title>
 <style>
-:root{
-  --bg:#ffffff;
-  --card:#ffffff;
-  --text:#0047AB;
-  --primary:#0047AB;
-  --accent:#F28C28;
-  --line:#d9e3f4;
-  --muted:#6b7fa4;
-}
+:root{--bg:#ffffff;--card:#ffffff;--text:#0047AB;--primary:#0047AB;--accent:#F28C28;--line:#d9e3f4;--muted:#6b7fa4}
 *{box-sizing:border-box}
 body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:var(--text)}
 .wrap{max-width:1200px;margin:0 auto;padding:24px}
 .nav{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px}
 .nav a{color:var(--text);text-decoration:none;padding:10px 14px;border:1px solid var(--line);border-radius:12px;background:#fff}
-.nav a.active{background:#fff;color:var(--primary);font-weight:700;border-color:var(--line)}
-.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:20px}
+.nav a.active{font-weight:700}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:20px;margin-bottom:16px}
 h1{margin:0 0 8px;color:var(--primary)}
 .muted{color:var(--muted)}
-.score{font-size:56px;font-weight:900;margin:12px 0;color:var(--primary)}
-.pill{display:inline-block;padding:10px 14px;border-radius:999px;font-weight:700;background:#eef4ff;color:var(--primary);border:1px solid var(--line)}
+.box{border:1px solid var(--line);border-radius:16px;padding:16px;background:#fff;margin-top:16px}
+.title{font-size:26px;font-weight:800;color:var(--primary)}
+.score{font-size:42px;font-weight:900;margin-top:8px;color:var(--primary)}
+.level{display:inline-block;margin-top:8px;padding:8px 12px;border-radius:999px;border:1px solid var(--line);background:#eef4ff;color:var(--primary);font-weight:700}
 .bar{height:16px;background:#fff;border:1px solid var(--line);border-radius:999px;overflow:hidden;margin-top:16px}
 .bar>div{height:100%;width:0;background:linear-gradient(90deg,var(--primary),var(--accent));transition:width .3s ease}
-table{width:100%;border-collapse:collapse;margin-top:18px}
-th,td{border-bottom:1px solid var(--line);padding:10px 8px;text-align:left;color:var(--text)}
-th{color:var(--primary)}
-.btn{display:inline-block;margin-top:14px;background:var(--accent);color:#fff;padding:12px 16px;border-radius:12px;text-decoration:none;font-weight:700;border:none}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px}
+.field{display:flex;flex-direction:column;gap:8px}
+.field input,.field select{padding:10px 12px;border:1px solid var(--line);border-radius:12px;color:var(--primary);background:#fff;min-width:180px}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+.btn{background:var(--accent);color:#fff;border:none;border-radius:12px;padding:10px 14px;font-weight:700;cursor:pointer;text-decoration:none;display:inline-block}
+.small{font-size:13px;color:var(--muted)}
+table{width:100%;border-collapse:collapse;margin-top:16px;background:#fff;border:1px solid var(--line);border-radius:16px;overflow:hidden}
+th,td{padding:12px 10px;border-bottom:1px solid var(--line);text-align:left}
+th{color:var(--primary);background:#f7fbff}
+.right{text-align:right}
 </style>
 </head>
-<body onload="calc()">
+<body>
 <div class="wrap">
   <div class="nav">
     <a href="index.html">Главная</a>
-    <a href="id.html">Идентификационно-структурный</a>
-    <a href="oper.html">Операционно-деловой</a>
-    <a href="fin.html">Финансово-экономический</a>
-    <a href="external.html">Внешние признаки</a>
+    <a href="client.html">Карточка клиента</a>
+    <a href="id.html">Идентификационный блок</a>
+    <a href="oper.html">Операционный блок</a>
+    <a href="fin.html">Финансовый блок</a>
+    <a href="external.html">Внешний блок</a>
+    <a href="results.html">Результаты проверок</a>
     <a class="active" href="result.html">Итог</a>
   </div>
 
   <section class="card">
-    <h1>Интегральный показатель R*</h1>
-    <div class="muted">Итог считается как сумма вкладов блоков.</div>
-    <div class="score" id="total">0.000</div>
-    <div id="level" class="pill">Низкий</div>
-    <div class="bar"><div id="fill"></div></div>
-    <div class="muted" id="desc" style="margin-top:12px"></div>
+    <h1>Итог проверки</h1>
+    <div class="muted">Здесь отображается результат для проверяемой компании с названием организации и интегральным показателем.</div>
+
+    <div class="box">
+      <div class="title" id="companyTitle">Риск легализации преступных доходов</div>
+      <div class="score" id="total">0.000000</div>
+      <div id="level" class="level">Низкий риск</div>
+      <div class="bar"><div id="fill"></div></div>
+      <div class="small" id="desc" style="margin-top:10px"></div>
+    </div>
+
+    <div class="row">
+      <div class="field">
+        <label for="filterLevel"><b>Фильтр по уровню</b></label>
+        <select id="filterLevel" onchange="renderTable()">
+          <option value="all">Все</option>
+          <option value="low">Низкий</option>
+          <option value="medium">Умеренный</option>
+          <option value="veryhigh">Повышенный</option>
+          <option value="high">Высокий</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="searchName"><b>Поиск по названию</b></label>
+        <input id="searchName" type="text" placeholder="Введите название" oninput="renderTable()">
+      </div>
+    </div>
 
     <table>
-      <thead><tr><th>Диапазон</th><th>Уровень риска</th><th>Интерпретация</th></tr></thead>
-      <tbody>
-        <tr><td>0.00 <= R* < 0.25</td><td>Низкий</td><td>Стандартный режим проверки</td></tr>
-        <tr><td>0.25 <= R* < 0.50</td><td>Умеренный</td><td>Углубленная проверка</td></tr>
-        <tr><td>0.50 <= R* < 0.75</td><td>Повышенный</td><td>Усиленный комплаенс-контроль</td></tr>
-        <tr><td>0.75 <= R* <= 1.00</td><td>Высокий</td><td>Субъект повышенного внимания</td></tr>
-      </tbody>
+      <thead>
+        <tr>
+          <th>Название организации</th>
+          <th>Уровень риска</th>
+          <th class="right">Интегральный показатель</th>
+        </tr>
+      </thead>
+      <tbody id="tbody"></tbody>
     </table>
 
-    <a class="btn" href="index.html">На главную</a>
+    <div class="actions">
+      <a class="btn" href="results.html">Перейти к результатам</a>
+    </div>
   </section>
 </div>
 
 <script>
-function calc(){
+function riskLevel(t){t=+t||0;if(t>=0.75)return ['high','Высокий риск'];if(t>=0.5)return ['veryhigh','Повышенный риск'];if(t>=0.25)return ['medium','Умеренный риск'];return ['low','Низкий риск']}
+function descText(t){t=+t||0;if(t>=0.75)return 'Концентрация сильных индикаторов.';if(t>=0.5)return 'Совокупность значимых факторов риска.';if(t>=0.25)return 'Выявлены отдельные настораживающие признаки.';return 'Ограниченное количество риск-индикаторов.'}
+function esc(s){return (s||'').replace(/[&<>\"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;'}[m]))}
+function getClient(){return JSON.parse(localStorage.getItem('client_card')||'{}')}
+function getResults(){return JSON.parse(localStorage.getItem('aml_results')||'[]')}
+function saveCurrent(){
+  const c=getClient();
   const v=['b_id','b_oper','b_fin','b_ext'].map(k=>+localStorage.getItem(k)||0);
   const total=v.reduce((a,b)=>a+b,0);
+  const [code,label]=riskLevel(total);
+  const name=c.company||'Без названия';
+  const opf=c.opfSpecific==='Прочее' ? (c.opfOther||'Прочее') : (c.opfSpecific||'');
+  const opfText=[c.opfGroup==='commercial'?'Коммерческая':c.opfGroup==='nonprofit'?'Некоммерческая':c.opfGroup==='bp'?'Без прав юридического лица':'', opf].filter(Boolean).join(' / ');
+  const row={company:name, opf:opfText, level:label, code, total:total.toFixed(6), date:new Date().toISOString()};
+  const arr=getResults();
+  arr.unshift(row);
+  localStorage.setItem('aml_results',JSON.stringify(arr));
+  document.getElementById('companyTitle').textContent=`Риск легализации преступных доходов ${name}`;
   document.getElementById('total').textContent=total.toFixed(6);
-  const level=document.getElementById('level'),desc=document.getElementById('desc'),fill=document.getElementById('fill');
-  let txt='Низкий',d='Ограниченное количество риск-индикаторов.';
-  if(total>=0.75){txt='Высокий';d='Концентрация сильных индикаторов.'}
-  else if(total>=0.50){txt='Повышенный';d='Совокупность значимых факторов риска.'}
-  else if(total>=0.25){txt='Умеренный';d='Выявлены отдельные настораживающие признаки.'}
-  level.textContent=txt;
-  desc.textContent=d;
-  fill.style.width=Math.min(total,1)*100+'%';
+  document.getElementById('level').textContent=label;
+  document.getElementById('desc').textContent=descText(total);
+  document.getElementById('fill').style.width=Math.min(total,1)*100+'%';
 }
+function renderTable(){
+  const filter=document.getElementById('filterLevel').value;
+  const q=document.getElementById('searchName').value.trim().toLowerCase();
+  const data=getResults().filter(x=>{
+    const okF=filter==='all'||x.code===filter;
+    const okQ=!q||String(x.company||'').toLowerCase().includes(q);
+    return okF&&okQ;
+  });
+  const tbody=document.getElementById('tbody');
+  if(!data.length){tbody.innerHTML='<tr><td colspan="3" class="small">Нет записей по выбранному фильтру.</td></tr>';return}
+  tbody.innerHTML=data.map(x=>`<tr><td>${esc(x.company||'')}</td><td>${esc(x.level||'')}</td><td class="right">${Number(x.total||0).toFixed(6)}</td></tr>`).join('');
+}
+saveCurrent();
+renderTable();
 </script>
 </body>
 </html>
