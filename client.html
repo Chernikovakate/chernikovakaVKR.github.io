@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Карточка клиента</title>
+<style>
+:root{--bg:#ffffff;--card:#ffffff;--text:#0047AB;--primary:#0047AB;--accent:#F28C28;--line:#d9e3f4;--muted:#6b7fa4}
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:var(--text)}
+.wrap{max-width:1100px;margin:0 auto;padding:24px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:20px}
+h1{margin:0 0 8px;color:var(--primary)}
+.muted{color:var(--muted)}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0}
+.field{display:flex;flex-direction:column;gap:8px}
+label{font-weight:700;color:var(--primary)}
+input,select{padding:11px 12px;border:1px solid var(--line);border-radius:12px;color:var(--primary);background:#fff;font-size:15px}
+.btn{display:inline-block;margin-top:12px;background:var(--accent);color:#fff;padding:12px 16px;border-radius:12px;text-decoration:none;font-weight:700;border:none;cursor:pointer}
+.hidden{display:none}
+@media(max-width:800px){.row{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <section class="card">
+    <h1>Карточка клиента</h1>
+    <div class="muted">Сначала заполни наименование и организационно-правовую форму клиента.</div>
+
+    <div class="row">
+      <div class="field">
+        <label for="company">Наименование компании</label>
+        <input id="company" type="text" placeholder="Например: ООО Альфа">
+      </div>
+      <div class="field">
+        <label for="opfGroup">Категория ОПФ</label>
+        <select id="opfGroup" onchange="updateForms()">
+          <option value="">Выберите категорию</option>
+          <option value="commercial">Коммерческая</option>
+          <option value="nonprofit">Некоммерческая</option>
+          <option value="bp">Без прав юридического лица</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="field">
+        <label for="opfSpecific">Организационно-правовая форма</label>
+        <select id="opfSpecific" onchange="toggleOther()">
+          <option value="">Сначала выбери категорию</option>
+        </select>
+      </div>
+      <div class="field hidden" id="opfOtherWrap">
+        <label for="opfOther">Укажите форму вручную</label>
+        <input id="opfOther" type="text" placeholder="Впишите форму">
+      </div>
+    </div>
+
+    <button class="btn" onclick="saveClient()">Сохранить</button>
+  </section>
+</div>
+
+<script>
+const forms = {
+  commercial: ['АО','ООО','Товарищество','ИП','Унитарное предприятие (ГУП/МУП)','Производственный кооператив','Прочее'],
+  nonprofit: ['АНО (автономная некоммерческая организация)','Фонд','Общественная организация','Религиозная организация','Ассоциация','Прочее'],
+  bp: ['Без прав юридического лица','Прочее']
+};
+
+function updateForms() {
+  const g = document.getElementById('opfGroup').value;
+  const s = document.getElementById('opfSpecific');
+  s.innerHTML = '';
+  if (!g) {
+    s.innerHTML = '<option value="">Сначала выбери категорию</option>';
+    document.getElementById('opfOtherWrap').classList.add('hidden');
+    return;
+  }
+  forms[g].forEach(v => {
+    const o = document.createElement('option');
+    o.value = v;
+    o.textContent = v;
+    s.appendChild(o);
+  });
+  toggleOther();
+}
+
+function toggleOther() {
+  const v = document.getElementById('opfSpecific').value;
+  document.getElementById('opfOtherWrap').classList.toggle('hidden', v !== 'Прочее');
+}
+
+function saveClient() {
+  const company = document.getElementById('company').value.trim();
+  const opfGroup = document.getElementById('opfGroup').value;
+  const opfSpecific = document.getElementById('opfSpecific').value;
+  const opfOther = document.getElementById('opfOther').value.trim();
+  const data = { company, opfGroup, opfSpecific, opfOther };
+  localStorage.setItem('client_card', JSON.stringify(data));
+  alert('Сохранено');
+}
+</script>
+</body>
+</html>
