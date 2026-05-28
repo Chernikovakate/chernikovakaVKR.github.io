@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html lang="ru"><head><meta charset="UTF-8">
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Результаты проверок</title>
 <style>
@@ -13,17 +15,24 @@ body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:
 .card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:20px;margin-bottom:16px}
 h1{margin:0 0 8px;color:var(--primary)}
 .muted{color:var(--muted)}
-.list{display:grid;grid-template-columns:1fr;gap:12px;margin-top:16px}
-.row{border:1px solid var(--line);border-radius:16px;padding:14px;background:#fff;display:flex;justify-content:space-between;gap:16px;align-items:flex-start;flex-wrap:wrap}
-.title{font-weight:700;color:var(--primary);font-size:18px}
-.meta{color:var(--muted);font-size:14px;margin-top:4px}
-.score{font-size:22px;font-weight:700;color:var(--primary)}
-.level{display:inline-block;margin-top:6px;padding:6px 10px;border-radius:999px;border:1px solid var(--line);color:var(--primary);background:#eef4ff;font-size:13px}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:16px}
+.kpi{border:1px solid var(--line);border-radius:16px;padding:16px;background:#fff}
+.kpi .v{font-size:28px;font-weight:800;color:var(--primary)}
+.kpi .l{font-size:14px;color:var(--muted);margin-top:4px}
+.toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:end;margin-top:16px}
+.field{display:flex;flex-direction:column;gap:8px}
+.field input,.field select{padding:10px 12px;border:1px solid var(--line);border-radius:12px;color:var(--primary);background:#fff;min-width:180px}
 .btn{background:var(--accent);color:#fff;border:none;border-radius:12px;padding:10px 14px;font-weight:700;cursor:pointer;text-decoration:none;display:inline-block}
 .btn.del{background:#fff;color:#c0392b;border:1px solid #f0c0bd}
-.top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
-.small{font-size:14px;color:var(--muted)}
-</style></head>
+table{width:100%;border-collapse:collapse;margin-top:16px;background:#fff;border:1px solid var(--line);border-radius:16px;overflow:hidden}
+th,td{padding:12px 10px;border-bottom:1px solid var(--line);text-align:left}
+th{color:var(--primary);background:#f7fbff}
+.right{text-align:right}
+.small{font-size:13px;color:var(--muted)}
+@media(max-width:900px){.stats{grid-template-columns:1fr 1fr}}
+@media(max-width:650px){.stats{grid-template-columns:1fr}}
+</style>
+</head>
 <body>
 <div class="wrap">
   <div class="nav">
@@ -38,36 +47,82 @@ h1{margin:0 0 8px;color:var(--primary)}
   </div>
 
   <section class="card">
-    <div class="top">
-      <div>
-        <h1>Результаты проверок</h1>
-        <div class="muted">Здесь сохраняются все выполненные проверки. Записи видны всем пользователям и могут быть удалены вручную.</div>
-      </div>
-      <button class="btn" onclick="clearAll()">Удалить все</button>
+    <h1>Результаты проверок</h1>
+    <div class="muted">Здесь отображается статистика по всем сохранённым проверкам, а также список самих результатов с возможностью удаления.</div>
+    <div class="stats">
+      <div class="kpi"><div class="v" id="countAll">0</div><div class="l">Всего проверок</div></div>
+      <div class="kpi"><div class="v" id="countHigh">0</div><div class="l">Высокий риск</div></div>
+      <div class="kpi"><div class="v" id="countMedium">0</div><div class="l">Умеренный и выше</div></div>
+      <div class="kpi"><div class="v" id="avgScore">0.000000</div><div class="l">Средний показатель</div></div>
     </div>
-    <div id="list" class="list"></div>
+
+    <div class="toolbar">
+      <div class="field">
+        <label for="filterLevel"><b>Фильтр по уровню</b></label>
+        <select id="filterLevel" onchange="render()">
+          <option value="all">Все</option>
+          <option value="low">Низкий</option>
+          <option value="medium">Умеренный</option>
+          <option value="veryhigh">Повышенный</option>
+          <option value="high">Высокий</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="searchName"><b>Поиск по названию</b></label>
+        <input id="searchName" type="text" placeholder="Введите название" oninput="render()">
+      </div>
+      <button class="btn del" onclick="clearAll()">Удалить все</button>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Название организации</th>
+          <th>Уровень риска</th>
+          <th class="right">Интегральный показатель</th>
+          <th>Дата</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody id="tbody"></tbody>
+    </table>
   </section>
 </div>
 
 <script>
-function levelText(t){if(t>=0.75)return 'Высокий риск';if(t>=0.5)return 'Повышенный риск';if(t>=0.25)return 'Умеренный риск';return 'Низкий риск'}
-function esc(s){return (s||'').replace(/[&<>\"]+/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;'}[m]))}
-function load(){
-  const data=JSON.parse(localStorage.getItem('aml_results')||'[]');
-  const list=document.getElementById('list');
-  if(!data.length){list.innerHTML='<div class="muted">Пока нет сохранённых результатов.</div>';return}
-  list.innerHTML=data.map((x,i)=>`<div class="row"><div><div class="title">${esc(x.company||'Без названия')}</div><div class="meta">${esc(x.opf||'ОПФ не указана')} · ${new Date(x.date).toLocaleString('ru-RU')}</div><div class="level">${levelText(+x.total||0)}</div></div><div style="text-align:right"><div class="score">${Number(x.total||0).toFixed(6)}</div><button class="btn del" onclick="delOne(${i})">Удалить</button></div></div>`).join('')
+function getResults(){return JSON.parse(localStorage.getItem('aml_results')||'[]')}
+function esc(s){return (s||'').replace(/[&<>\"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;'}[m]))}
+function render(){
+  const filter=document.getElementById('filterLevel').value;
+  const q=document.getElementById('searchName').value.trim().toLowerCase();
+  const data=getResults().filter(x=>{
+    const okF=filter==='all'||x.code===filter;
+    const okQ=!q||String(x.company||'').toLowerCase().includes(q);
+    return okF&&okQ;
+  });
+  const tbody=document.getElementById('tbody');
+  const total=getResults().length;
+  const high=getResults().filter(x=>x.code==='high').length;
+  const medium=getResults().filter(x=>x.code==='medium' || x.code==='veryhigh' || x.code==='high').length;
+  const avg=total?getResults().reduce((s,x)=>s+(+x.total||0),0)/total:0;
+  document.getElementById('countAll').textContent=total;
+  document.getElementById('countHigh').textContent=high;
+  document.getElementById('countMedium').textContent=medium;
+  document.getElementById('avgScore').textContent=avg.toFixed(6);
+  if(!data.length){tbody.innerHTML='<tr><td colspan="5" class="small">Нет записей по выбранному фильтру.</td></tr>';return}
+  tbody.innerHTML=data.map((x,i)=>`<tr><td>${esc(x.company||'')}</td><td>${esc(x.level||'')}</td><td class="right">${Number(x.total||0).toFixed(6)}</td><td>${new Date(x.date).toLocaleString('ru-RU')}</td><td><button class="btn del" onclick="delOne(${i})">Удалить</button></td></tr>`).join('')
 }
 function delOne(i){
-  const data=JSON.parse(localStorage.getItem('aml_results')||'[]');
-  data.splice(i,1);
-  localStorage.setItem('aml_results',JSON.stringify(data));
-  load();
+  const arr=getResults();
+  arr.splice(i,1);
+  localStorage.setItem('aml_results',JSON.stringify(arr));
+  render();
 }
 function clearAll(){
   localStorage.removeItem('aml_results');
-  load();
+  render();
 }
-load();
+render();
 </script>
-</body></html>
+</body>
+</html>
