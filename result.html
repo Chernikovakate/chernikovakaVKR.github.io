@@ -86,6 +86,32 @@
       background: #f3f7ff;
       color: #114d91;
     }
+
+    .actions {
+      display: flex;
+      gap: 14px;
+      margin-top: 22px;
+      flex-wrap: wrap;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 220px;
+      height: 54px;
+      padding: 0 24px;
+      border-radius: 16px;
+      text-decoration: none;
+      font-weight: 700;
+      color: #fff;
+      background: #f39a2e;
+      box-shadow: 0 6px 14px rgba(243, 154, 46, 0.28);
+      transition: transform 0.15s ease, opacity 0.15s ease;
+    }
+    .btn:hover {
+      transform: translateY(-1px);
+      opacity: 0.95;
+    }
   </style>
 </head>
 <body>
@@ -150,13 +176,19 @@
           </tr>
         </tbody>
       </table>
+
+      <div class="actions">
+        <a href="index.html" class="btn">На главную</a>
+        <a href="results.html" class="btn">Результаты проверок</a>
+      </div>
     </div>
   </div>
 
   <script>
     const data = JSON.parse(localStorage.getItem('resultData') || '{}');
 
-    document.getElementById('orgName').textContent = data.orgName || 'Без названия';
+    const orgName = data.orgName || data.name || 'Без названия';
+    document.getElementById('orgName').textContent = orgName;
     document.getElementById('opf').textContent = data.opf || '—';
     document.getElementById('score').textContent = data.score ?? '—';
 
