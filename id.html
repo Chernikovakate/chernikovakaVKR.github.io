@@ -26,39 +26,12 @@ input,select{padding:11px 12px;border:1px solid var(--line);border-radius:12px;c
 <body>
 <div class="wrap">
   <section class="card">
-    <h1>Карточка клиента</h1>
+    <h1>Клиентские характеристики</h1>
     <div class="muted">Заполни сведения о клиенте и нажми «Далее» — после этого откроются блоки индикаторов по порядку.</div>
 
     <div class="row">
       <div class="field">
-        <label for="company">Наименование компании</label>
-        <input id="company" type="text" placeholder="Например: ООО Альфа">
-      </div>
-      <div class="field">
-        <label for="opfGroup">Категория ОПФ</label>
-        <select id="opfGroup" onchange="updateForms()">
-          <option value="">Выберите категорию</option>
-          <option value="commercial">Коммерческая</option>
-          <option value="nonprofit">Некоммерческая</option>
-          <option value="bp">Без прав юридического лица</option>
-        </select>
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="field">
-        <label for="opfSpecific">Организационно-правовая форма</label>
-        <select id="opfSpecific" onchange="toggleOther()">
-          <option value="">Сначала выбери категорию</option>
-        </select>
-      </div>
-      <div class="field hidden" id="opfOtherWrap">
-        <label for="opfOther">Укажите форму вручную</label>
-        <input id="opfOther" type="text" placeholder="Впишите форму">
-      </div>
-    </div>
-
-    <div class="section-title">Показатели блока клиентских характеристик</div>
+     
 
     <div class="row">
       <div class="field">
