@@ -1,36 +1,67 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Итоговый результат</title>
+<style>
+:root{--bg:#ffffff;--card:#ffffff;--text:#0047AB;--primary:#0047AB;--accent:#F28C28;--line:#d9e3f4;--muted:#6b7fa4}
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:var(--text)}
+.wrap{max-width:1200px;margin:0 auto;padding:24px}
+.nav{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px}
+.nav a{color:var(--text);text-decoration:none;padding:10px 14px;border:1px solid var(--line);border-radius:12px;background:#fff}
+.nav a.active{background:#fff;color:var(--primary);font-weight:700;border-color:var(--line)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:20px;margin-bottom:16px}
+h1{margin:0 0 8px;color:var(--primary)}
+.muted{color:var(--muted)}
+.box{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;margin:10px 0;padding:12px 14px;border:1px solid var(--line);border-radius:14px;background:#fff}
+.label{font-weight:700;color:var(--primary)}
+.value{font-weight:700;color:var(--primary)}
+.big{font-size:28px;font-weight:700;color:var(--primary);margin:10px 0}
+.btn{display:inline-block;margin-top:14px;background:var(--accent);color:#fff;padding:12px 16px;border-radius:12px;text-decoration:none;font-weight:700;border:none}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="nav">
+    <a href="index.html">Главная</a>
+    <a href="id.html">Клиентские характеристики</a>
+    <a href="external.html">Внешние признаки</a>
+    <a href="oper.html">Операционно-деловой</a>
+    <a href="fin.html">Финансово-экономический</a>
+    <a class="active" href="result.html">Итог</a>
+  </div>
+
+  <section class="card">
+    <h1>Итоговый результат</h1>
+    <div class="muted">Сводный риск рассчитывается автоматически на основе всех блоков.</div>
+
+    <div class="box"><div class="label">Клиентские характеристики</div><div class="value" id="v1">—</div></div>
+    <div class="box"><div class="label">Внешние признаки</div><div class="value" id="v2">—</div></div>
+    <div class="box"><div class="label">Операционно-деловой блок</div><div class="value" id="v3">—</div></div>
+    <div class="box"><div class="label">Финансово-экономический блок</div><div class="value" id="v4">—</div></div>
+
+    <div class="box"><div class="label">Интегральный показатель риска</div><div class="value big" id="total">—</div></div>
+    <div class="box"><div class="label">Уровень риска</div><div class="value" id="level">—</div></div>
+
+    <a class="btn" href="index.html">На главную</a>
+  </section>
+</div>
 <script>
-function calc(){
-  const client = JSON.parse(localStorage.getItem('client_card') || '{}');
-  const name = client.company || '';
-  document.getElementById('title').textContent = 'Уровень риска легализации преступных доходов ' + (name || 'Без названия');
-
-  const v=['b_id','b_oper','b_fin','b_ext'].map(k=>+localStorage.getItem(k)||0);
-  const total=v.reduce((a,b)=>a+b,0);
-  document.getElementById('total').textContent=total.toFixed(6);
-
-  const level=document.getElementById('level'),desc=document.getElementById('desc'),fill=document.getElementById('fill');
-  let txt='Низкий',d='Ограниченное количество риск-индикаторов.';
-  if(total>=0.75){txt='Высокий';d='Концентрация сильных индикаторов.'}
-  else if(total>=0.50){txt='Повышенный';d='Совокупность значимых факторов риска.'}
-  else if(total>=0.25){txt='Умеренный';d='Выявлены отдельные настораживающие признаки.'}
-  level.textContent=txt;
-  desc.textContent=d;
-  fill.style.width=Math.min(total,1)*100+'%';
-
-  const code = total >= 0.75 ? 'high' : total >= 0.50 ? 'veryhigh' : total >= 0.25 ? 'medium' : 'low';
-  const arr = JSON.parse(localStorage.getItem('aml_results') || '[]');
-  const currentKey = name + '|' + total.toFixed(6) + '|' + code;
-
-  if (localStorage.getItem('last_saved_result') !== currentKey) {
-    arr.push({
-      company: name,
-      level: txt,
-      total: total,
-      code: code,
-      date: new Date().toISOString()
-    });
-    localStorage.setItem('aml_results', JSON.stringify(arr));
-    localStorage.setItem('last_saved_result', currentKey);
-  }
-}
+function read(key){try{return JSON.parse(localStorage.getItem(key)||'null')}catch(e){return null}}
+function fmt(x){return x===null||x===undefined||isNaN(x)?'—':Number(x).toFixed(3)}
+const c=read('b_client'), e=read('b_ext'), o=read('b_oper'), f=read('b_fin');
+const v1=c?c.score:0, v2=e?e.score:0, v3=o?o.score:0, v4=f?f.score:0;
+document.getElementById('v1').textContent=fmt(v1);
+document.getElementById('v2').textContent=fmt(v2);
+document.getElementById('v3').textContent=fmt(v3);
+document.getElementById('v4').textContent=fmt(v4);
+const total=(v1+v2+v3+v4)/4;
+document.getElementById('total').textContent=fmt(total);
+let lvl='Низкий';
+if(total>=0.75) lvl='Высокий'; else if(total>=0.5) lvl='Повышенный'; else if(total>=0.25) lvl='Умеренный';
+document.getElementById('level').textContent=lvl;
 </script>
+</body>
+</html>
