@@ -12,22 +12,22 @@ body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:
 .card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:20px}
 h1{margin:0 0 8px;color:var(--primary)}
 .muted{color:var(--muted);font-size:14px;line-height:1.35;margin-bottom:18px}
-.row{display:flex;flex-direction:column;gap:12px;margin:14px 0}
-.field{width:100%}
-@media(max-width:800px){.row{flex-direction:column}}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0}
+.field{display:flex;flex-direction:column;gap:8px}
 label{font-weight:700;color:var(--primary)}
 input,select{padding:11px 12px;border:1px solid var(--line);border-radius:12px;color:var(--primary);background:#fff;font-size:15px}
 .btn{display:inline-block;background:var(--accent);color:#fff;padding:12px 16px;border-radius:12px;text-decoration:none;font-weight:700;border:none;cursor:pointer}
 .hidden{display:none}
 @media(max-width:800px){.row{grid-template-columns:1fr}}
-.section-title{margin:18px 0 4px;font-size:16px;font-weight:700;color:var(--primary)}
 </style>
 </head>
 <body>
 <div class="wrap">
   <section class="card">
     <h1>Карточка клиента</h1>
-    
+    <div class="muted">Заполни сведения о клиенте и нажми «Далее» — после этого откроются блоки индикаторов по порядку.</div>
+
+    <div class="row">
       <div class="field">
         <label for="company">Наименование компании</label>
         <input id="company" type="text" placeholder="Например: ООО Альфа">
@@ -47,7 +47,7 @@ input,select{padding:11px 12px;border:1px solid var(--line);border-radius:12px;c
       <div class="field">
         <label for="opfSpecific">Организационно-правовая форма</label>
         <select id="opfSpecific" onchange="toggleOther()">
-          <option value="">Сначала выберите категорию</option>
+          <option value="">Сначала выбери категорию</option>
         </select>
       </div>
       <div class="field hidden" id="opfOtherWrap">
@@ -55,19 +55,6 @@ input,select{padding:11px 12px;border:1px solid var(--line);border-radius:12px;c
         <input id="opfOther" type="text" placeholder="Впишите форму">
       </div>
     </div>
-
-    <div class="section-title">Показатели блока клиентских характеристик</div>
-
-    <div class="row">
-      <div class="field">
-        <label for="massAddress">Массовый адрес регистрации</label>
-        <select id="massAddress">
-          <option value="">Выберите значение</option>
-          <option value="0">Нет</option>
-          <option value="1">Да</option>
-        </select>
-      </div>
-     
 
     <a class="btn" href="id.html" onclick="saveClient()">Далее</a>
   </section>
@@ -79,7 +66,6 @@ const forms={
   nonprofit:['АНО (автономная некоммерческая организация)','Фонд','Общественная организация','Религиозная организация','Ассоциация','Прочее'],
   bp:['Без прав юридического лица','Прочее']
 };
-
 function updateForms(){
   const g=document.getElementById('opfGroup').value;
   const s=document.getElementById('opfSpecific');
@@ -97,31 +83,16 @@ function updateForms(){
   });
   toggleOther();
 }
-
 function toggleOther(){
   const v=document.getElementById('opfSpecific').value;
   document.getElementById('opfOtherWrap').classList.toggle('hidden', v!=='Прочее');
 }
-
 function saveClient(){
   const data={
     company:document.getElementById('company').value.trim(),
     opfGroup:document.getElementById('opfGroup').value,
     opfSpecific:document.getElementById('opfSpecific').value,
-    opfOther:document.getElementById('opfOther').value.trim(),
-    massAddress:document.getElementById('massAddress').value,
-    massHead:document.getElementById('massHead').value,
-    invalidEgrul:document.getElementById('invalidEgrul').value,
-    noOrg:document.getElementById('noOrg').value,
-    ageCompany:document.getElementById('ageCompany').value,
-    liquidation:document.getElementById('liquidation').value,
-    noLicense:document.getElementById('noLicense').value,
-    offshoreReg:document.getElementById('offshoreReg').value,
-    ownershipComplex:document.getElementById('ownershipComplex').value,
-    recentChanges:document.getElementById('recentChanges').value,
-    nko:document.getElementById('nko').value,
-    riskOkved:document.getElementById('riskOkved').value,
-    manyOkved:document.getElementById('manyOkved').value
+    opfOther:document.getElementById('opfOther').value.trim()
   };
   localStorage.setItem('client_card', JSON.stringify(data));
 }
