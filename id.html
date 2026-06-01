@@ -3,64 +3,251 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Идентификационно-структурный</title>
+<title>Карточка клиента</title>
 <style>
-:root{
-  --bg:#ffffff;
-  --card:#ffffff;
-  --text:#0047AB;
-  --primary:#0047AB;
-  --accent:#F28C28;
-  --line:#d9e3f4;
-  --muted:#6b7fa4;
-}
+:root{--bg:#ffffff;--card:#ffffff;--text:#0047AB;--primary:#0047AB;--accent:#F28C28;--line:#d9e3f4;--muted:#6b7fa4}
 *{box-sizing:border-box}
 body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:var(--text)}
-.wrap{max-width:1200px;margin:0 auto;padding:24px}
-.nav{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px}
-.nav a{color:var(--text);text-decoration:none;padding:10px 14px;border:1px solid var(--line);border-radius:12px;background:#fff}
-.nav a.active{background:#fff;color:var(--primary);font-weight:700;border-color:var(--line)}
-.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:20px;margin-bottom:16px}
+.wrap{max-width:1100px;margin:0 auto;padding:24px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:20px}
 h1{margin:0 0 8px;color:var(--primary)}
-.muted{color:var(--muted)}
-.row{display:grid;grid-template-columns:1fr 180px 120px;gap:10px;align-items:center;margin:12px 0}
-.row select{width:100%;padding:10px 12px;border-radius:12px;background:#fff;color:var(--primary);border:1px solid var(--line)}
-.score{font-weight:700;color:var(--primary)}
-.btn{display:inline-block;margin-top:14px;background:var(--accent);color:#fff;padding:12px 16px;border-radius:12px;text-decoration:none;font-weight:700;border:none}
-@media(max-width:900px){.row{grid-template-columns:1fr}}
+.muted{color:var(--muted);font-size:14px;line-height:1.35;margin-bottom:18px}
+.row{display:flex;flex-direction:column;gap:12px;margin:14px 0}
+.field{width:100%}
+@media(max-width:800px){.row{flex-direction:column}}
+label{font-weight:700;color:var(--primary)}
+input,select{padding:11px 12px;border:1px solid var(--line);border-radius:12px;color:var(--primary);background:#fff;font-size:15px}
+.btn{display:inline-block;background:var(--accent);color:#fff;padding:12px 16px;border-radius:12px;text-decoration:none;font-weight:700;border:none;cursor:pointer}
+.hidden{display:none}
+@media(max-width:800px){.row{grid-template-columns:1fr}}
+.section-title{margin:18px 0 4px;font-size:16px;font-weight:700;color:var(--primary)}
 </style>
 </head>
 <body>
 <div class="wrap">
-  <div class="nav">
-    <a href="index.html">Главная</a>
-    <a class="active" href="id.html">Идентификационно-структурный</a>
-    <a href="oper.html">Операционно-деловой</a>
-    <a href="fin.html">Финансово-экономический</a>
-    <a href="external.html">Внешние признаки</a>
-    <a href="result.html">Итог</a>
-  </div>
-
   <section class="card">
-    <h1>Идентификационно-структурный блок</h1>
-    <div class="muted">Каждый индикатор оценивается как 0/1 по наличию критического признака.</div>
+    <h1>Карточка клиента</h1>
+    <div class="muted">Заполни сведения о клиенте и нажми «Далее» — после этого откроются блоки индикаторов по порядку.</div>
 
-    <div class="row"><div>Невозможность установить бенефициара</div><select id="i1"><option value="0">Нет</option><option value="1">Да</option></select><div class="score">0.065</div></div>
-    <div class="row"><div>Иностранное участие из юрисдикции риска</div><select id="i2"><option value="0">Нет</option><option value="1">Да</option></select><div class="score">0.054</div></div>
-    <div class="row"><div>Сложная структура собственности</div><select id="i3"><option value="0">Нет</option><option value="1">Да</option></select><div class="score">0.054</div></div>
-    <div class="row"><div>Массовый руководитель / учредитель</div><select id="i4"><option value="0">Нет</option><option value="1">Да</option></select><div class="score">0.043</div></div>
-    <div class="row"><div>Массовый адрес</div><select id="i5"><option value="0">Нет</option><option value="1">Да</option></select><div class="score">0.043</div></div>
-    <div class="row"><div>Срок существования менее 12 месяцев</div><select id="i6"><option value="0">Нет</option><option value="1">Да</option></select><div class="score">0.041</div></div>
+    <div class="row">
+      <div class="field">
+        <label for="company">Наименование компании</label>
+        <input id="company" type="text" placeholder="Например: ООО Альфа">
+      </div>
+      <div class="field">
+        <label for="opfGroup">Категория ОПФ</label>
+        <select id="opfGroup" onchange="updateForms()">
+          <option value="">Выберите категорию</option>
+          <option value="commercial">Коммерческая</option>
+          <option value="nonprofit">Некоммерческая</option>
+          <option value="bp">Без прав юридического лица</option>
+        </select>
+      </div>
+    </div>
 
-    <a class="btn" href="oper.html" onclick="saveBlock()">Далее</a>
+    <div class="row">
+      <div class="field">
+        <label for="opfSpecific">Организационно-правовая форма</label>
+        <select id="opfSpecific" onchange="toggleOther()">
+          <option value="">Сначала выбери категорию</option>
+        </select>
+      </div>
+      <div class="field hidden" id="opfOtherWrap">
+        <label for="opfOther">Укажите форму вручную</label>
+        <input id="opfOther" type="text" placeholder="Впишите форму">
+      </div>
+    </div>
+
+    <div class="section-title">Показатели блока клиентских характеристик</div>
+
+    <div class="row">
+      <div class="field">
+        <label for="massAddress">Массовый адрес регистрации</label>
+        <select id="massAddress">
+          <option value="">Выберите значение</option>
+          <option value="0">Нет</option>
+          <option value="1">Да</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="massHead">Массовый руководитель / учредитель</label>
+        <select id="massHead">
+          <option value="">Выберите значение</option>
+          <option value="0">Нет</option>
+          <option value="1">Да</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="field">
+        <label for="invalidEgrul">Наличие в ЕГРЮЛ записи о недостоверности сведений</label>
+        <select id="invalidEgrul">
+          <option value="">Выберите значение</option>
+          <option value="0">Нет</option>
+          <option value="1">Да</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="noOrg">Отсутствие органа или представителя юрлица по адресу из ЕГРЮЛ</label>
+        <select id="noOrg">
+          <option value="">Выберите значение</option>
+          <option value="0">Нет</option>
+          <option value="1">Да</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="field">
+        <label for="ageCompany">Короткий срок существования организации</label>
+        <select id="ageCompany">
+          <option value="">Выберите значение</option>
+          <option value="0">Более 24 мес.</option>
+          <option value="1">12–24 мес.</option>
+          <option value="2">Менее 12 мес.</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="liquidation">Наличие процедур ликвидации, реорганизации или банкротства</label>
+        <select id="liquidation">
+          <option value="">Выберите значение</option>
+          <option value="0">Нет</option>
+          <option value="1">Да</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="field">
+        <label for="noLicense">Осуществление деятельности без обязательной лицензии</label>
+        <select id="noLicense">
+          <option value="">Выберите значение</option>
+          <option value="0">Нет</option>
+          <option value="1">Да</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="offshoreReg">Регистрация клиента в офшорной зоне либо наличие учредителя из офшорной юрисдикции</label>
+        <select id="offshoreReg">
+          <option value="">Выберите значение</option>
+          <option value="0">Нет</option>
+          <option value="1">Да</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="field">
+        <label for="ownershipComplex">Структура собственности, препятствующая идентификации конечного бенефициара</label>
+        <select id="ownershipComplex">
+          <option value="">Выберите значение</option>
+          <option value="0">Простая, раскрыта</option>
+          <option value="1">Отдельные признаки усложнения</option>
+          <option value="2">Многоуровневая или частично непрозрачная</option>
+          <option value="3">Существенно затрудняет идентификацию</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="recentChanges">Недавняя смена юридического адреса, наименования или руководителя</label>
+        <select id="recentChanges">
+          <option value="">Выберите значение</option>
+          <option value="0">Более 12 мес.</option>
+          <option value="1">6–12 мес.</option>
+          <option value="2">Менее 6 мес.</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="field">
+        <label for="nko">Клиент — НКО, иностранная НКО, её отделение или филиал</label>
+        <select id="nko">
+          <option value="">Выберите значение</option>
+          <option value="0">Коммерческая</option>
+          <option value="1">Российская НКО</option>
+          <option value="2">Иностранная НКО / филиал</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="riskOkved">Наличие рисковых / необычных ОКВЭД</label>
+        <select id="riskOkved">
+          <option value="">Выберите значение</option>
+          <option value="0">Нет</option>
+          <option value="1">1–2 дополнительных рисковых кода</option>
+          <option value="2">Основной рисковый или 3+ кода</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="field">
+        <label for="manyOkved">Чрезмерное количество несвязанных между собой кодов ОКВЭД</label>
+        <select id="manyOkved">
+          <option value="">Выберите значение</option>
+          <option value="0">1–5 кодов</option>
+          <option value="1">6–10</option>
+          <option value="2">Более 10</option>
+        </select>
+      </div>
+      <div class="field"></div>
+    </div>
+
+    <a class="btn" href="id.html" onclick="saveClient()">Далее</a>
   </section>
 </div>
 
 <script>
-const w=[0.065,0.054,0.054,0.043,0.043,0.041];
-function saveBlock(){
-  const v=[1,2,3,4,5,6].map(i=>+document.getElementById('i'+i).value);
-  localStorage.setItem('b_id',v.reduce((s,x,i)=>s+x*w[i],0).toFixed(6));
+const forms={
+  commercial:['АО','ООО','Товарищество','ИП','Унитарное предприятие (ГУП/МУП)','Производственный кооператив','Прочее'],
+  nonprofit:['АНО (автономная некоммерческая организация)','Фонд','Общественная организация','Религиозная организация','Ассоциация','Прочее'],
+  bp:['Без прав юридического лица','Прочее']
+};
+
+function updateForms(){
+  const g=document.getElementById('opfGroup').value;
+  const s=document.getElementById('opfSpecific');
+  s.innerHTML='';
+  if(!g){
+    s.innerHTML='<option value="">Сначала выбери категорию</option>';
+    document.getElementById('opfOtherWrap').classList.add('hidden');
+    return;
+  }
+  forms[g].forEach(v=>{
+    const o=document.createElement('option');
+    o.value=v;
+    o.textContent=v;
+    s.appendChild(o);
+  });
+  toggleOther();
+}
+
+function toggleOther(){
+  const v=document.getElementById('opfSpecific').value;
+  document.getElementById('opfOtherWrap').classList.toggle('hidden', v!=='Прочее');
+}
+
+function saveClient(){
+  const data={
+    company:document.getElementById('company').value.trim(),
+    opfGroup:document.getElementById('opfGroup').value,
+    opfSpecific:document.getElementById('opfSpecific').value,
+    opfOther:document.getElementById('opfOther').value.trim(),
+    massAddress:document.getElementById('massAddress').value,
+    massHead:document.getElementById('massHead').value,
+    invalidEgrul:document.getElementById('invalidEgrul').value,
+    noOrg:document.getElementById('noOrg').value,
+    ageCompany:document.getElementById('ageCompany').value,
+    liquidation:document.getElementById('liquidation').value,
+    noLicense:document.getElementById('noLicense').value,
+    offshoreReg:document.getElementById('offshoreReg').value,
+    ownershipComplex:document.getElementById('ownershipComplex').value,
+    recentChanges:document.getElementById('recentChanges').value,
+    nko:document.getElementById('nko').value,
+    riskOkved:document.getElementById('riskOkved').value,
+    manyOkved:document.getElementById('manyOkved').value
+  };
+  localStorage.setItem('client_card', JSON.stringify(data));
 }
 </script>
 </body>
