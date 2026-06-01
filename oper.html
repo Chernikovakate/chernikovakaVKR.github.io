@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Операционно-деловой</title>
+<title>Операционно-деловой блок</title>
 <style>
 :root{
   --bg:#ffffff;
@@ -43,24 +43,57 @@ h1{margin:0 0 8px;color:var(--primary)}
 
   <section class="card">
     <h1>Операционно-деловой блок</h1>
-    <div class="muted">Для качественных признаков пользователь выбирает да/нет. Вклад считается по итоговому весу.</div>
+    <div class="muted">Оцениваются признаки несоответствия заявленной модели деятельности фактическому поведению клиента.</div>
 
-    <div class="row"><div>Высокорисковый вид деятельности</div><select id="o1"><option value="0">Нет</option><option value="1">Да</option></select><div class="score">0.051</div></div>
-    <div class="row"><div>Несоответствие профиля деятельности операциям</div><select id="o2"><option value="0">Нет</option><option value="1">Да</option></select><div class="score">0.051</div></div>
-    <div class="row"><div>ВЭД с юрисдикциями риска</div><select id="o3"><option value="0">Нет</option><option value="1">Да</option></select><div class="score">0.043</div></div>
-    <div class="row"><div>Преобладание наличных расчетов</div><select id="o4"><option value="0">Нет</option><option value="1">Да</option></select><div class="score">0.034</div></div>
-    <div class="row"><div>Большое число нестабильных контрагентов</div><select id="o5"><option value="0">Нет</option><option value="1">Да</option></select><div class="score">0.034</div></div>
-    <div class="row"><div>Отсутствие видимых следов деятельности</div><select id="o6"><option value="0">Нет</option><option value="1">Да</option></select><div class="score">0.037</div></div>
+    <div class="row">
+      <div>Несоответствие операций профилю деятельности по ОКВЭД</div>
+      <select id="o1">
+        <option value="0">Полное соответствие</option>
+        <option value="1">Часть операций вне профиля</option>
+        <option value="2">Операции явно не соответствуют профилю</option>
+      </select>
+      <div class="score">0.300</div>
+    </div>
+
+    <div class="row">
+      <div>Отсутствие публичных признаков деятельности</div>
+      <select id="o2">
+        <option value="0">Есть четкие признаки</option>
+        <option value="1">Минимальное присутствие</option>
+        <option value="2">Полное отсутствие</option>
+      </select>
+      <div class="score">0.250</div>
+    </div>
+
+    <div class="row">
+      <div>Заявленная высокая доля наличных расчётов</div>
+      <select id="o3">
+        <option value="0">Менее 15%</option>
+        <option value="1">15–30%</option>
+        <option value="2">Более 30%</option>
+      </select>
+      <div class="score">0.250</div>
+    </div>
+
+    <div class="row">
+      <div>Участие в государственных программах и крупных государственных контрактах</div>
+      <select id="o4">
+        <option value="0">Нет</option>
+        <option value="1">До 6 млн руб.</option>
+        <option value="2">Более 6 млн руб. или несоразмерно</option>
+      </select>
+      <div class="score">0.200</div>
+    </div>
 
     <a class="btn" href="fin.html" onclick="saveBlock()">Далее</a>
   </section>
 </div>
 
 <script>
-const w=[0.051,0.051,0.043,0.034,0.034,0.037];
+const w=[0.30,0.25,0.25,0.20];
 function saveBlock(){
-  const v=[1,2,3,4,5,6].map(i=>+document.getElementById('o'+i).value);
-  localStorage.setItem('b_oper',v.reduce((s,x,i)=>s+x*w[i],0).toFixed(6));
+  const v=[1,2,3,4].map(i=>+document.getElementById('o'+i).value);
+  localStorage.setItem('b_oper', JSON.stringify({score:v.reduce((s,x,i)=>s+x*w[i],0), values:v}));
 }
 </script>
 </body>
