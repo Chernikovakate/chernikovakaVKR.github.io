@@ -27,9 +27,7 @@ input,select{padding:11px 12px;border:1px solid var(--line);border-radius:12px;c
 <div class="wrap">
   <section class="card">
     <h1>Карточка клиента</h1>
-    <div class="muted">Заполни сведения о клиенте и нажми «Далее» — после этого откроются блоки индикаторов по порядку.</div>
-
-    <div class="row">
+    
       <div class="field">
         <label for="company">Наименование компании</label>
         <input id="company" type="text" placeholder="Например: ООО Альфа">
@@ -49,7 +47,7 @@ input,select{padding:11px 12px;border:1px solid var(--line);border-radius:12px;c
       <div class="field">
         <label for="opfSpecific">Организационно-правовая форма</label>
         <select id="opfSpecific" onchange="toggleOther()">
-          <option value="">Сначала выбери категорию</option>
+          <option value="">Сначала выберите категорию</option>
         </select>
       </div>
       <div class="field hidden" id="opfOtherWrap">
@@ -69,129 +67,7 @@ input,select{padding:11px 12px;border:1px solid var(--line);border-radius:12px;c
           <option value="1">Да</option>
         </select>
       </div>
-      <div class="field">
-        <label for="massHead">Массовый руководитель / учредитель</label>
-        <select id="massHead">
-          <option value="">Выберите значение</option>
-          <option value="0">Нет</option>
-          <option value="1">Да</option>
-        </select>
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="field">
-        <label for="invalidEgrul">Наличие в ЕГРЮЛ записи о недостоверности сведений</label>
-        <select id="invalidEgrul">
-          <option value="">Выберите значение</option>
-          <option value="0">Нет</option>
-          <option value="1">Да</option>
-        </select>
-      </div>
-      <div class="field">
-        <label for="noOrg">Отсутствие органа или представителя юрлица по адресу из ЕГРЮЛ</label>
-        <select id="noOrg">
-          <option value="">Выберите значение</option>
-          <option value="0">Нет</option>
-          <option value="1">Да</option>
-        </select>
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="field">
-        <label for="ageCompany">Короткий срок существования организации</label>
-        <select id="ageCompany">
-          <option value="">Выберите значение</option>
-          <option value="0">Более 24 мес.</option>
-          <option value="1">12–24 мес.</option>
-          <option value="2">Менее 12 мес.</option>
-        </select>
-      </div>
-      <div class="field">
-        <label for="liquidation">Наличие процедур ликвидации, реорганизации или банкротства</label>
-        <select id="liquidation">
-          <option value="">Выберите значение</option>
-          <option value="0">Нет</option>
-          <option value="1">Да</option>
-        </select>
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="field">
-        <label for="noLicense">Осуществление деятельности без обязательной лицензии</label>
-        <select id="noLicense">
-          <option value="">Выберите значение</option>
-          <option value="0">Нет</option>
-          <option value="1">Да</option>
-        </select>
-      </div>
-      <div class="field">
-        <label for="offshoreReg">Регистрация клиента в офшорной зоне либо наличие учредителя из офшорной юрисдикции</label>
-        <select id="offshoreReg">
-          <option value="">Выберите значение</option>
-          <option value="0">Нет</option>
-          <option value="1">Да</option>
-        </select>
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="field">
-        <label for="ownershipComplex">Структура собственности, препятствующая идентификации конечного бенефициара</label>
-        <select id="ownershipComplex">
-          <option value="">Выберите значение</option>
-          <option value="0">Простая, раскрыта</option>
-          <option value="1">Отдельные признаки усложнения</option>
-          <option value="2">Многоуровневая или частично непрозрачная</option>
-          <option value="3">Существенно затрудняет идентификацию</option>
-        </select>
-      </div>
-      <div class="field">
-        <label for="recentChanges">Недавняя смена юридического адреса, наименования или руководителя</label>
-        <select id="recentChanges">
-          <option value="">Выберите значение</option>
-          <option value="0">Более 12 мес.</option>
-          <option value="1">6–12 мес.</option>
-          <option value="2">Менее 6 мес.</option>
-        </select>
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="field">
-        <label for="nko">Клиент — НКО, иностранная НКО, её отделение или филиал</label>
-        <select id="nko">
-          <option value="">Выберите значение</option>
-          <option value="0">Коммерческая</option>
-          <option value="1">Российская НКО</option>
-          <option value="2">Иностранная НКО / филиал</option>
-        </select>
-      </div>
-      <div class="field">
-        <label for="riskOkved">Наличие рисковых / необычных ОКВЭД</label>
-        <select id="riskOkved">
-          <option value="">Выберите значение</option>
-          <option value="0">Нет</option>
-          <option value="1">1–2 дополнительных рисковых кода</option>
-          <option value="2">Основной рисковый или 3+ кода</option>
-        </select>
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="field">
-        <label for="manyOkved">Чрезмерное количество несвязанных между собой кодов ОКВЭД</label>
-        <select id="manyOkved">
-          <option value="">Выберите значение</option>
-          <option value="0">1–5 кодов</option>
-          <option value="1">6–10</option>
-          <option value="2">Более 10</option>
-        </select>
-      </div>
-      <div class="field"></div>
-    </div>
+     
 
     <a class="btn" href="id.html" onclick="saveClient()">Далее</a>
   </section>
