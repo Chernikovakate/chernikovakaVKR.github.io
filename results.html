@@ -49,6 +49,7 @@ th{color:var(--primary);background:#f7fbff}
   <section class="card">
     <h1>Результаты проверок</h1>
     <div class="muted">Здесь отображается статистика по всем сохранённым проверкам, а также список самих результатов с возможностью удаления.</div>
+
     <div class="stats">
       <div class="kpi"><div class="v" id="countAll">0</div><div class="l">Всего проверок</div></div>
       <div class="kpi"><div class="v" id="countHigh">0</div><div class="l">Высокий риск</div></div>
@@ -59,7 +60,7 @@ th{color:var(--primary);background:#f7fbff}
     <div class="toolbar">
       <div class="field">
         <label for="filterLevel"><b>Фильтр по уровню</b></label>
-        <select id="filterLevel" onchange="render()">
+        <select id="filterLevel">
           <option value="all">Все</option>
           <option value="low">Низкий</option>
           <option value="medium">Умеренный</option>
@@ -67,11 +68,13 @@ th{color:var(--primary);background:#f7fbff}
           <option value="high">Высокий</option>
         </select>
       </div>
+
       <div class="field">
         <label for="searchName"><b>Поиск по названию</b></label>
-        <input id="searchName" type="text" placeholder="Введите название" oninput="render()">
+        <input id="searchName" type="text" placeholder="Введите название">
       </div>
-      <button class="btn del" onclick="clearAll()">Удалить все</button>
+
+      <button class="btn del" type="button" onclick="clearAll()">Удалить все</button>
     </div>
 
     <table>
@@ -90,40 +93,79 @@ th{color:var(--primary);background:#f7fbff}
 </div>
 
 <script>
-function getResults(){return JSON.parse(localStorage.getItem('aml_results')||'[]')}
-function esc(s){return String(s||'').replace(/[&<>\"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;',\"'\":'&#39;'}[m]))}
-function render(){
-  const filter=document.getElementById('filterLevel').value;
-  const q=document.getElementById('searchName').value.trim().toLowerCase();
-  const all=getResults();
-  const data=all.map((x,idx)=>({x,idx})).filter(obj=>{
-    const x=obj.x;
-    const okF=filter==='all'||x.code===filter;
-    const okQ=!q||String(x.company||'').toLowerCase().includes(q);
-    return okF&&okQ;
-  });
-  const tbody=document.getElementById('tbody');
-  const total=all.length;
-  const high=all.filter(x=>x.code==='high').length;
-  const medium=all.filter(x=>x.code==='medium' || x.code==='veryhigh' || x.code==='high').length;
-  const avg=total?all.reduce((s,x)=>s+(+x.total||0),0)/total:0;
-  document.getElementById('countAll').textContent=total;
-  document.getElementById('countHigh').textContent=high;
-  document.getElementById('countMedium').textContent=medium;
-  document.getElementById('avgScore').textContent=avg.toFixed(6);
-  if(!data.length){tbody.innerHTML='<tr><td colspan=\"5\" class=\"small\">Нет записей по выбранному фильтру.</td></tr>';return}
-  tbody.innerHTML=data.map(obj=>`<tr><td>${esc(obj.x.company||'')}</td><td>${esc(obj.x.level||'')}</td><td class=\"right\">${Number(obj.x.total||0).toFixed(6)}</td><td>${new Date(obj.x.date).toLocaleString('ru-RU')}</td><td><button class=\"btn del\" onclick=\"delOne(${obj.idx})\">Удалить</button></td></tr>`).join('')
+function getResults(){
+  try{
+    return JSON.parse(localStorage.getItem('aml_results') || '[]');
+  }catch(e){
+    return [];
+  }
 }
+
+function saveResults(arr){
+  localStorage.setItem('aml_results', JSON.stringify(arr));
+}
+
+function esc(s){
+  return String(s || '').replace(/[&<>"']/g, function(m){
+    return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m];
+  });
+}
+
+function render(){
+  const filter = document.getElementById('filterLevel').value;
+  const q = document.getElementById('searchName').value.trim().toLowerCase();
+  const all = getResults();
+
+  const data = all.map((x, idx) => ({x, idx})).filter(obj => {
+    const x = obj.x;
+    const okF = filter === 'all' || x.code === filter;
+    const okQ = !q || String(x.company || '').toLowerCase().includes(q);
+    return okF && okQ;
+  });
+
+  const total = all.length;
+  const high = all.filter(x => x.code === 'high').length;
+  const medium = all.filter(x => x.code === 'medium' || x.code === 'veryhigh' || x.code === 'high').length;
+  const avg = total ? all.reduce((s, x) => s + (+x.total || 0), 0) / total : 0;
+
+  document.getElementById('countAll').textContent = total;
+  document.getElementById('countHigh').textContent = high;
+  document.getElementById('countMedium').textContent = medium;
+  document.getElementById('avgScore').textContent = avg.toFixed(6);
+
+  const tbody = document.getElementById('tbody');
+
+  if(!data.length){
+    tbody.innerHTML = '<tr><td colspan="5" class="small">Нет записей по выбранному фильтру.</td></tr>';
+    return;
+  }
+
+  tbody.innerHTML = data.map(obj => `
+    <tr>
+      <td>${esc(obj.x.company || '')}</td>
+      <td>${esc(obj.x.level || '')}</td>
+      <td class="right">${Number(obj.x.total || 0).toFixed(6)}</td>
+      <td>${obj.x.date ? new Date(obj.x.date).toLocaleString('ru-RU') : ''}</td>
+      <td><button class="btn del" type="button" onclick="delOne(${obj.idx})">Удалить</button></td>
+    </tr>
+  `).join('');
+}
+
 function delOne(i){
-  const arr=getResults();
-  arr.splice(i,1);
-  localStorage.setItem('aml_results',JSON.stringify(arr));
+  const arr = getResults();
+  arr.splice(i, 1);
+  saveResults(arr);
   render();
 }
+
 function clearAll(){
   localStorage.removeItem('aml_results');
   render();
 }
+
+document.getElementById('filterLevel').addEventListener('change', render);
+document.getElementById('searchName').addEventListener('input', render);
+
 render();
 </script>
 </body>
