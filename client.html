@@ -107,7 +107,10 @@ textarea{min-height:96px;resize:vertical}
         <input id="industry" type="text" placeholder="Например оптовая торговля">
       </div>
 
-
+      <div class="field full">
+        <label for="address">Юридический адрес</label>
+        <input id="address" type="text" placeholder="Укажите юридический адрес">
+      </div>
 
       <div class="field full">
         <label for="comment">Комментарий</label>
@@ -139,6 +142,7 @@ function fillForm(data){
   document.getElementById('opf').value = data.opf || '';
   document.getElementById('inn').value = data.inn || '';
   document.getElementById('industry').value = data.industry || '';
+  document.getElementById('address').value = data.address || '';
   document.getElementById('comment').value = data.comment || '';
 }
 
@@ -148,9 +152,17 @@ function collectData(){
     opf: document.getElementById('opf').value,
     inn: document.getElementById('inn').value.trim(),
     industry: document.getElementById('industry').value.trim(),
+    address: document.getElementById('address').value.trim(),
     comment: document.getElementById('comment').value.trim(),
     score: 0
   };
+}
+
+function clearCurrentBlocksKeepArchive(){
+  localStorage.removeItem('b_ext');
+  localStorage.removeItem('b_oper');
+  localStorage.removeItem('b_fin');
+  localStorage.removeItem('last_result_debug');
 }
 
 function saveDraft(){
@@ -162,12 +174,18 @@ function saveDraft(){
 function saveBlock(){
   const data = collectData();
   const msg = document.getElementById('saveMsg');
+  const oldClient = readClient();
+  const oldCompany = oldClient && oldClient.company ? oldClient.company : '';
 
   if(!data.company){
-    msg.textContent = 'Заполните обязательное поле: Наименование организации';
+    msg.textContent = 'Заполните обязательное поле: Наименование организации.';
     msg.className = 'note error';
     document.getElementById('company').focus();
     return false;
+  }
+
+  if(oldCompany && oldCompany !== data.company){
+    clearCurrentBlocksKeepArchive();
   }
 
   localStorage.setItem('b_client', JSON.stringify(data));
@@ -178,13 +196,20 @@ function saveBlock(){
 function clearClient(){
   localStorage.removeItem('b_client');
   localStorage.removeItem('client_name');
+  localStorage.removeItem('b_ext');
+  localStorage.removeItem('b_oper');
+  localStorage.removeItem('b_fin');
+  localStorage.removeItem('last_result_debug');
+
   document.getElementById('company').value = '';
   document.getElementById('opf').value = '';
   document.getElementById('inn').value = '';
   document.getElementById('industry').value = '';
+  document.getElementById('address').value = '';
   document.getElementById('comment').value = '';
+
   const msg = document.getElementById('saveMsg');
-  msg.textContent = 'Данные карточки очищены.';
+  msg.textContent = 'Данные текущей проверки очищены.';
   msg.className = 'note';
 }
 
