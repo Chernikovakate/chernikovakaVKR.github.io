@@ -139,7 +139,6 @@ function fillForm(data){
   document.getElementById('opf').value = data.opf || '';
   document.getElementById('inn').value = data.inn || '';
   document.getElementById('industry').value = data.industry || '';
-  document.getElementById('address').value = data.address || '';
   document.getElementById('comment').value = data.comment || '';
 }
 
@@ -149,7 +148,6 @@ function collectData(){
     opf: document.getElementById('opf').value,
     inn: document.getElementById('inn').value.trim(),
     industry: document.getElementById('industry').value.trim(),
-    address: document.getElementById('address').value.trim(),
     comment: document.getElementById('comment').value.trim(),
     score: 0
   };
@@ -166,7 +164,7 @@ function saveBlock(){
   const msg = document.getElementById('saveMsg');
 
   if(!data.company){
-    msg.textContent = 'Заполните обязательное поле: Наименование организации.';
+    msg.textContent = 'Заполните обязательное поле: Наименование организации';
     msg.className = 'note error';
     document.getElementById('company').focus();
     return false;
@@ -184,7 +182,6 @@ function clearClient(){
   document.getElementById('opf').value = '';
   document.getElementById('inn').value = '';
   document.getElementById('industry').value = '';
-  document.getElementById('address').value = '';
   document.getElementById('comment').value = '';
   const msg = document.getElementById('saveMsg');
   msg.textContent = 'Данные карточки очищены.';
