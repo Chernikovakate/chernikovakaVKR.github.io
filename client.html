@@ -18,43 +18,16 @@
 body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:var(--text)}
 .wrap{max-width:1200px;margin:0 auto;padding:24px}
 .nav{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px}
-.nav a{
-  color:var(--text);
-  text-decoration:none;
-  padding:10px 14px;
-  border:1px solid var(--line);
-  border-radius:12px;
-  background:#fff;
-}
+.nav a{color:var(--text);text-decoration:none;padding:10px 14px;border:1px solid var(--line);border-radius:12px;background:#fff}
 .nav a.active{font-weight:700}
-.card{
-  background:var(--card);
-  border:1px solid var(--line);
-  border-radius:18px;
-  padding:20px;
-  margin-bottom:16px;
-}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:20px;margin-bottom:16px}
 h1{margin:0 0 8px;color:var(--primary)}
 .muted{color:var(--muted)}
-.form-grid{
-  display:grid;
-  grid-template-columns:repeat(2,1fr);
-  gap:14px;
-  margin-top:18px;
-}
-.field{
-  display:flex;
-  flex-direction:column;
-  gap:8px;
-}
-.field.full{
-  grid-column:1 / -1;
-}
-label{
-  font-weight:700;
-  color:var(--primary);
-}
-input, select, textarea{
+.form-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-top:18px}
+.field{display:flex;flex-direction:column;gap:8px}
+.field.full{grid-column:1 / -1}
+label{font-weight:700;color:var(--primary)}
+input,select,textarea{
   width:100%;
   padding:10px 12px;
   border:1px solid var(--line);
@@ -62,16 +35,8 @@ input, select, textarea{
   color:var(--primary);
   background:#fff;
 }
-textarea{
-  min-height:96px;
-  resize:vertical;
-}
-.actions{
-  display:flex;
-  gap:12px;
-  flex-wrap:wrap;
-  margin-top:18px;
-}
+textarea{min-height:96px;resize:vertical}
+.actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:18px}
 .btn{
   display:inline-block;
   background:var(--accent);
@@ -88,11 +53,8 @@ textarea{
   color:var(--primary);
   border:1px solid var(--line);
 }
-.note{
-  font-size:13px;
-  color:var(--muted);
-  margin-top:8px;
-}
+.note{font-size:13px;color:var(--muted);margin-top:8px}
+.error{color:#c0392b}
 @media(max-width:800px){
   .form-grid{grid-template-columns:1fr}
   .field.full{grid-column:auto}
@@ -104,10 +66,10 @@ textarea{
   <div class="nav">
     <a href="index.html">Главная</a>
     <a class="active" href="client.html">Карточка клиента</a>
-    <a href="id.html">Идентификационный блок</a>
-    <a href="oper.html">Операционный блок</a>
-    <a href="external.html">Внешний блок</a>
-    <a href="fin.html">Финансовый блок</a>
+    <a href="id.html">Клиентские характеристики</a>
+    <a href="external.html">Внешние признаки</a>
+    <a href="oper.html">Операционно-деловой</a>
+    <a href="fin.html">Финансово-экономический</a>
     <a href="result.html">Итог</a>
     <a href="results.html">Результаты проверок</a>
   </div>
@@ -116,80 +78,59 @@ textarea{
     <h1>Карточка клиента</h1>
     <div class="muted">Заполните основные сведения о проверяемой организации.</div>
 
-    <form id="clientForm">
-      <div class="form-grid">
-        <div class="field full">
-          <label for="company">Наименование организации</label>
-          <input id="company" type="text" placeholder="Например ООО «Альфа»" required>
-        </div>
-
-        <div class="field">
-          <label for="opf">Организационно-правовая форма</label>
-          <select id="opf">
-            <option value="">Выберите значение</option>
-            <option value="ООО">ООО</option>
-            <option value="АО">АО</option>
-            <option value="ПАО">ПАО</option>
-            <option value="ИП">ИП</option>
-            <option value="НКО">НКО</option>
-            <option value="Иное">Иное</option>
-          </select>
-        </div>
-
-        <div class="field">
-          <label for="inn">ИНН</label>
-          <input id="inn" type="text" placeholder="Например 7701234567">
-        </div>
-
-        <div class="field">
-          <label for="industry">Сфера деятельности</label>
-          <input id="industry" type="text" placeholder="Например оптовая торговля">
-        </div>
-
-        <div class="field full">
-          <label for="address">Юридический адрес</label>
-          <input id="address" type="text" placeholder="Укажите юридический адрес">
-        </div>
-
-        <div class="field full">
-          <label for="comment">Комментарий</label>
-          <textarea id="comment" placeholder="Дополнительные сведения о клиенте"></textarea>
-        </div>
+    <div class="form-grid">
+      <div class="field full">
+        <label for="company">Наименование организации *</label>
+        <input id="company" type="text" placeholder="Например ООО «Альфа»">
       </div>
 
-      <div class="actions">
-        <button class="btn" type="submit">Далее</button>
-        <button class="btn secondary" type="button" id="clearBtn">Очистить</button>
+      <div class="field">
+        <label for="opf">Организационно-правовая форма</label>
+        <select id="opf">
+          <option value="">Выберите значение</option>
+          <option value="ООО">ООО</option>
+          <option value="АО">АО</option>
+          <option value="ПАО">ПАО</option>
+          <option value="ИП">ИП</option>
+          <option value="НКО">НКО</option>
+          <option value="Иное">Иное</option>
+        </select>
       </div>
-      <div class="note" id="saveMsg"></div>
-    </form>
+
+      <div class="field">
+        <label for="inn">ИНН</label>
+        <input id="inn" type="text" placeholder="Например 7701234567">
+      </div>
+
+      <div class="field">
+        <label for="industry">Сфера деятельности</label>
+        <input id="industry" type="text" placeholder="Например оптовая торговля">
+      </div>
+
+
+
+      <div class="field full">
+        <label for="comment">Комментарий</label>
+        <textarea id="comment" placeholder="Дополнительные сведения о клиенте"></textarea>
+      </div>
+    </div>
+
+    <div class="actions">
+      <a class="btn" href="id.html" onclick="return saveBlock()">Далее</a>
+      <button class="btn secondary" type="button" onclick="clearClient()">Очистить</button>
+    </div>
+
+    <div class="note" id="saveMsg"></div>
   </section>
 </div>
 
 <script>
-const STORAGE_KEY = 'b_client';
-
 function readClient(){
   try{
-    return JSON.parse(localStorage.getItem(STORAGE_KEY) || 'null');
+    return JSON.parse(localStorage.getItem('b_client') || 'null');
   }catch(e){
     return null;
   }
-}
-
-function writeClient(data){
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-}
-
-function getFormData(){
-  return {
-    company: document.getElementById('company').value.trim(),
-    opf: document.getElementById('opf').value,
-    inn: document.getElementById('inn').value.trim(),
-    industry: document.getElementById('industry').value.trim(),
-    address: document.getElementById('address').value.trim(),
-    comment: document.getElementById('comment').value.trim()
-  };
 }
 
 function fillForm(data){
@@ -202,55 +143,57 @@ function fillForm(data){
   document.getElementById('comment').value = data.comment || '';
 }
 
-function saveClient(showMessage){
-  const data = getFormData();
-
-  const payload = {
-    ...data,
-    score: 0,
-    savedAt: new Date().toISOString()
+function collectData(){
+  return {
+    company: document.getElementById('company').value.trim(),
+    opf: document.getElementById('opf').value,
+    inn: document.getElementById('inn').value.trim(),
+    industry: document.getElementById('industry').value.trim(),
+    address: document.getElementById('address').value.trim(),
+    comment: document.getElementById('comment').value.trim(),
+    score: 0
   };
+}
 
-  writeClient(payload);
+function saveDraft(){
+  const data = collectData();
+  localStorage.setItem('b_client', JSON.stringify(data));
   localStorage.setItem('client_name', data.company || '');
+}
 
-  if(showMessage){
-    document.getElementById('saveMsg').textContent = 'Карточка клиента сохранена.';
+function saveBlock(){
+  const data = collectData();
+  const msg = document.getElementById('saveMsg');
+
+  if(!data.company){
+    msg.textContent = 'Заполните обязательное поле: Наименование организации.';
+    msg.className = 'note error';
+    document.getElementById('company').focus();
+    return false;
   }
+
+  localStorage.setItem('b_client', JSON.stringify(data));
+  localStorage.setItem('client_name', data.company);
+  return true;
 }
 
 function clearClient(){
-  localStorage.removeItem(STORAGE_KEY);
+  localStorage.removeItem('b_client');
   localStorage.removeItem('client_name');
-  document.getElementById('clientForm').reset();
-  document.getElementById('saveMsg').textContent = 'Данные карточки очищены.';
+  document.getElementById('company').value = '';
+  document.getElementById('opf').value = '';
+  document.getElementById('inn').value = '';
+  document.getElementById('industry').value = '';
+  document.getElementById('address').value = '';
+  document.getElementById('comment').value = '';
+  const msg = document.getElementById('saveMsg');
+  msg.textContent = 'Данные карточки очищены.';
+  msg.className = 'note';
 }
 
-document.getElementById('clientForm').addEventListener('submit', function(e){
-  e.preventDefault();
-
-  const company = document.getElementById('company').value.trim();
-
-  if(!company){
-    document.getElementById('company').focus();
-    document.getElementById('saveMsg').textContent = 'Укажите наименование организации.';
-    return;
-  }
-
-  saveClient(true);
-
-  setTimeout(function(){
-    window.location.href = 'id.html';
-  }, 50);
-});
-
-document.getElementById('clearBtn').addEventListener('click', clearClient);
-
-['company','opf','inn','industry','address','comment'].forEach(id => {
+['company','opf','inn','industry','address','comment'].forEach(id=>{
   const el = document.getElementById(id);
-  el.addEventListener(el.tagName === 'SELECT' ? 'change' : 'input', function(){
-    saveClient(false);
-  });
+  el.addEventListener(el.tagName === 'SELECT' ? 'change' : 'input', saveDraft);
 });
 
 fillForm(readClient());
