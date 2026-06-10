@@ -19,23 +19,29 @@ h1{margin:0 0 8px;color:var(--primary)}
 .label{font-weight:700;color:var(--primary)}
 .value{font-weight:700;color:var(--primary)}
 .big{font-size:28px;font-weight:700;color:var(--primary);margin:10px 0}
-.btn{display:inline-block;margin-top:14px;background:var(--accent);color:#fff;padding:12px 16px;border-radius:12px;text-decoration:none;font-weight:700;border:none}
+.actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:14px}
+.btn{display:inline-block;background:var(--accent);color:#fff;padding:12px 16px;border-radius:12px;text-decoration:none;font-weight:700;border:none}
+.btn.secondary{background:#fff;color:var(--primary);border:1px solid var(--line)}
 </style>
 </head>
 <body>
 <div class="wrap">
   <div class="nav">
     <a href="index.html">Главная</a>
+    <a href="client.html">Карточка клиента</a>
     <a href="id.html">Клиентские характеристики</a>
     <a href="external.html">Внешние признаки</a>
     <a href="oper.html">Операционно-деловой</a>
     <a href="fin.html">Финансово-экономический</a>
+    <a href="results.html">Результаты проверок</a>
     <a class="active" href="result.html">Итог</a>
   </div>
 
   <section class="card">
     <h1>Итоговый результат</h1>
     <div class="muted">Сводный риск рассчитывается автоматически на основе всех блоков.</div>
+
+    <div class="box"><div class="label">Наименование организации</div><div class="value" id="company">—</div></div>
 
     <div class="box"><div class="label">Клиентские характеристики</div><div class="value" id="v1">—</div></div>
     <div class="box"><div class="label">Внешние признаки</div><div class="value" id="v2">—</div></div>
@@ -45,23 +51,56 @@ h1{margin:0 0 8px;color:var(--primary)}
     <div class="box"><div class="label">Интегральный показатель риска</div><div class="value big" id="total">—</div></div>
     <div class="box"><div class="label">Уровень риска</div><div class="value" id="level">—</div></div>
 
-    <a class="btn" href="index.html">На главную</a>
+    <div class="actions">
+      <a class="btn" href="index.html">На главную</a>
+      <a class="btn secondary" href="results.html">К результатам проверок</a>
+    </div>
   </section>
 </div>
+
 <script>
-function read(key){try{return JSON.parse(localStorage.getItem(key)||'null')}catch(e){return null}}
-function fmt(x){return x===null||x===undefined||isNaN(x)?'—':Number(x).toFixed(3)}
-const c=read('b_client'), e=read('b_ext'), o=read('b_oper'), f=read('b_fin');
-const v1=c?c.score:0, v2=e?e.score:0, v3=o?o.score:0, v4=f?f.score:0;
-document.getElementById('v1').textContent=fmt(v1);
-document.getElementById('v2').textContent=fmt(v2);
-document.getElementById('v3').textContent=fmt(v3);
-document.getElementById('v4').textContent=fmt(v4);
-const total=(v1+v2+v3+v4)/4;
-document.getElementById('total').textContent=fmt(total);
-let lvl='Низкий';
-if(total>=0.75) lvl='Высокий'; else if(total>=0.5) lvl='Повышенный'; else if(total>=0.25) lvl='Умеренный';
-document.getElementById('level').textContent=lvl;
+function read(key){
+  try{
+    return JSON.parse(localStorage.getItem(key) || 'null');
+  }catch(e){
+    return null;
+  }
+}
+
+function fmt(x){
+  return x===null || x===undefined || isNaN(x) ? '—' : Number(x).toFixed(3);
+}
+
+const c = read('b_client');
+const e = read('b_ext');
+const o = read('b_oper');
+const f = read('b_fin');
+
+const companyName =
+  (c && c.company) ||
+  localStorage.getItem('client_name') ||
+  '—';
+
+const v1 = c ? c.score : 0;
+const v2 = e ? e.score : 0;
+const v3 = o ? o.score : 0;
+const v4 = f ? f.score : 0;
+
+document.getElementById('company').textContent = companyName;
+document.getElementById('v1').textContent = fmt(v1);
+document.getElementById('v2').textContent = fmt(v2);
+document.getElementById('v3').textContent = fmt(v3);
+document.getElementById('v4').textContent = fmt(v4);
+
+const total = (v1 + v2 + v3 + v4) / 4;
+document.getElementById('total').textContent = fmt(total);
+
+let lvl = 'Низкий';
+if(total >= 0.75) lvl = 'Высокий';
+else if(total >= 0.5) lvl = 'Повышенный';
+else if(total >= 0.25) lvl = 'Умеренный';
+
+document.getElementById('level').textContent = lvl;
 </script>
 </body>
 </html>
