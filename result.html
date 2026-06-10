@@ -70,7 +70,7 @@ function read(key){
 }
 
 function fmt(x){
-  return x === null || x === undefined || isNaN(x) ? '—' : Number(x).toFixed(3);
+  return x===null || x===undefined || isNaN(x) ? '—' : Number(x).toFixed(3);
 }
 
 function getRiskMeta(total){
@@ -82,7 +82,10 @@ function getRiskMeta(total){
 
 function getResults(){
   try{
-    return JSON.parse(localStorage.getItem('aml_results') || '[]');
+    const raw = localStorage.getItem('aml_results');
+    if(!raw) return [];
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) ? parsed : [];
   }catch(e){
     return [];
   }
@@ -97,7 +100,7 @@ const e = read('b_ext');
 const o = read('b_oper');
 const f = read('b_fin');
 
-const companyName = (c && c.company) || localStorage.getItem('client_name') || '—';
+const companyName = (c && c.company) || localStorage.getItem('client_name') || 'Без названия';
 const v1 = c && !isNaN(c.score) ? Number(c.score) : 0;
 const v2 = e && !isNaN(e.score) ? Number(e.score) : 0;
 const v3 = o && !isNaN(o.score) ? Number(o.score) : 0;
@@ -130,6 +133,8 @@ function saveCurrentCheck(){
     }
   };
 
+  localStorage.setItem('last_result_debug', JSON.stringify(entry));
+
   const arr = getResults();
   const last = arr.length ? arr[arr.length - 1] : null;
 
@@ -146,7 +151,7 @@ function saveCurrentCheck(){
   if(!isSame){
     arr.push(entry);
     saveResults(arr);
-    document.getElementById('saveInfo').textContent = 'Результат проверки автоматически сохранён.';
+    document.getElementById('saveInfo').textContent = 'Результат проверки сохранён.';
   } else {
     document.getElementById('saveInfo').textContent = 'Этот результат уже сохранён.';
   }
