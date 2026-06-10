@@ -3,74 +3,183 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Клиентские характеристики</title>
+<title>Карточка клиента</title>
 <style>
-:root{--bg:#ffffff;--card:#ffffff;--text:#0047AB;--primary:#0047AB;--accent:#F28C28;--line:#d9e3f4;--muted:#6b7fa4}
+:root{
+  --bg:#ffffff;
+  --card:#ffffff;
+  --text:#0047AB;
+  --primary:#0047AB;
+  --accent:#F28C28;
+  --line:#d9e3f4;
+  --muted:#6b7fa4;
+}
 *{box-sizing:border-box}
 body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:var(--text)}
 .wrap{max-width:1200px;margin:0 auto;padding:24px}
 .nav{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px}
-.nav a{color:var(--text);text-decoration:none;padding:10px 14px;border:1px solid var(--line);border-radius:12px;background:#fff}
-.nav a.active{background:#fff;color:var(--primary);font-weight:700;border-color:var(--line)}
-.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:20px;margin-bottom:16px}
+.nav a{
+  color:var(--text);
+  text-decoration:none;
+  padding:10px 14px;
+  border:1px solid var(--line);
+  border-radius:12px;
+  background:#fff;
+}
+.nav a.active{
+  font-weight:700;
+}
+.card{
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:18px;
+  padding:20px;
+  margin-bottom:16px;
+}
 h1{margin:0 0 8px;color:var(--primary)}
 .muted{color:var(--muted)}
-.row{display:grid;grid-template-columns:1fr 220px 120px 120px;gap:10px;align-items:center;margin:12px 0}
-.row select,.row input{width:100%;padding:10px 12px;border-radius:12px;background:#fff;color:var(--primary);border:1px solid var(--line)}
-.score,.level{font-weight:700;color:var(--primary)}
-.btn{display:inline-block;margin-top:14px;background:var(--accent);color:#fff;padding:12px 16px;border-radius:12px;text-decoration:none;font-weight:700;border:none}
-.small{font-size:13px;color:var(--muted);margin-top:4px}
-@media(max-width:1100px){.row{grid-template-columns:1fr 1fr}}
-@media(max-width:700px){.row{grid-template-columns:1fr}}
+.form-grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:14px;
+  margin-top:18px;
+}
+.field{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+.field.full{
+  grid-column:1 / -1;
+}
+label{
+  font-weight:700;
+  color:var(--primary);
+}
+input, select, textarea{
+  width:100%;
+  padding:10px 12px;
+  border:1px solid var(--line);
+  border-radius:12px;
+  color:var(--primary);
+  background:#fff;
+}
+textarea{
+  min-height:96px;
+  resize:vertical;
+}
+.actions{
+  display:flex;
+  gap:12px;
+  flex-wrap:wrap;
+  margin-top:18px;
+}
+.btn{
+  display:inline-block;
+  background:var(--accent);
+  color:#fff;
+  padding:12px 16px;
+  border-radius:12px;
+  text-decoration:none;
+  font-weight:700;
+  border:none;
+  cursor:pointer;
+}
+.btn.secondary{
+  background:#fff;
+  color:var(--primary);
+  border:1px solid var(--line);
+}
+.note{
+  font-size:13px;
+  color:var(--muted);
+  margin-top:8px;
+}
+@media(max-width:800px){
+  .form-grid{grid-template-columns:1fr}
+  .field.full{grid-column:auto}
+}
 </style>
 </head>
 <body>
 <div class="wrap">
   <div class="nav">
     <a href="index.html">Главная</a>
-    <a class="active" href="id.html">Клиентские характеристики</a>
-    <a href="oper.html">Операционно-деловой</a>
-    <a href="fin.html">Финансово-экономический</a>
-    <a href="external.html">Внешние признаки</a>
+    <a class="active" href="client.html">Карточка клиента</a>
+    <a href="id.html">Идентификационный блок</a>
+    <a href="oper.html">Операционный блок</a>
+    <a href="external.html">Внешний блок</a>
+    <a href="fin.html">Финансовый блок</a>
     <a href="result.html">Итог</a>
+    <a href="results.html">Результаты проверок</a>
   </div>
 
   <section class="card">
-    <h1>Клиентские характеристики</h1>
-    <div class="muted">Заполни характеристики клиента. Система сама присваивает уровни 0/1/2 и считает взвешенный результат блока.</div>
+    <h1>Карточка клиента</h1>
+    <div class="muted">Заполните основные сведения о проверяемой организации. После сохранения данные будут использованы при расчёте итогового результата и в журнале проверок.</div>
 
-    <div class="row"><div>Массовый адрес регистрации</div><select id="c1"><option value="0">Нет</option><option value="1">Да</option></select><div class="level" id="c1l">—</div><div class="score">0.070</div></div>
-    <div class="row"><div>Массовый руководитель / учредитель</div><select id="c2"><option value="0">Нет</option><option value="1">Да</option></select><div class="level" id="c2l">—</div><div class="score">0.070</div></div>
-    <div class="row"><div>Наличие в ЕГРЮЛ записи о недостоверности сведений</div><select id="c3"><option value="0">Нет</option><option value="1">Да</option></select><div class="level" id="c3l">—</div><div class="score">0.100</div></div>
-    <div class="row"><div>Отсутствие органа или представителя юрлица по адресу из ЕГРЮЛ</div><select id="c4"><option value="0">Нет</option><option value="1">Да</option></select><div class="level" id="c4l">—</div><div class="score">0.080</div></div>
-    <div class="row"><div>Короткий срок существования организации</div><select id="c5"><option value="0">Более 24 мес.</option><option value="1">12–24 мес.</option><option value="2">Менее 12 мес.</option></select><div class="level" id="c5l">—</div><div class="score">0.050</div></div>
-    <div class="row"><div>Наличие процедур ликвидации, реорганизации или банкротства</div><select id="c6"><option value="0">Нет</option><option value="1">Да</option></select><div class="level" id="c6l">—</div><div class="score">0.100</div></div>
-    <div class="row"><div>Осуществление деятельности без обязательной лицензии</div><select id="c7"><option value="0">Нет</option><option value="1">Да</option></select><div class="level" id="c7l">—</div><div class="score">0.070</div></div>
-    <div class="row"><div>Регистрация клиента в офшорной зоне либо наличие учредителя из офшорной юрисдикции</div><select id="c8"><option value="0">Нет</option><option value="1">Да</option></select><div class="level" id="c8l">—</div><div class="score">0.100</div></div>
-    <div class="row"><div>Структура собственности, препятствующая идентификации конечного бенефициара</div><select id="c9"><option value="0">Простая, раскрыта</option><option value="1">Отдельные признаки усложнения</option><option value="2">Многоуровневая или частично непрозрачная</option><option value="3">Существенно затрудняет идентификацию</option></select><div class="level" id="c9l">—</div><div class="score">0.100</div></div>
-    <div class="row"><div>Недавняя смена юридического адреса, наименования или руководителя</div><select id="c10"><option value="0">Более 12 мес.</option><option value="1">6–12 мес.</option><option value="2">Менее 6 мес.</option></select><div class="level" id="c10l">—</div><div class="score">0.050</div></div>
-    <div class="row"><div>Клиент — НКО, иностранная НКО, её отделение или филиал</div><select id="c11"><option value="0">Коммерческая</option><option value="1">Российская НКО</option><option value="2">Иностранная НКО / филиал</option></select><div class="level" id="c11l">—</div><div class="score">0.050</div></div>
-    <div class="row"><div>Наличие рисковых / необычных ОКВЭД</div><select id="c12"><option value="0">Нет</option><option value="1">1–2 дополнительных рисковых кода</option><option value="2">Основной рисковый или 3+ кода</option></select><div class="level" id="c12l">—</div><div class="score">0.080</div></div>
-    <div class="row"><div>Чрезмерное количество несвязанных между собой кодов ОКВЭД</div><select id="c13"><option value="0">1–5 кодов</option><option value="1">6–10</option><option value="2">Более 10</option></select><div class="level" id="c13l">—</div><div class="score">0.080</div></div>
+    <form id="clientForm">
+      <div class="form-grid">
+        <div class="field full">
+          <label for="company">Наименование организации</label>
+          <input id="company" type="text" placeholder="Например ООО «Альфа»" required>
+        </div>
 
-    <a class="btn" href="oper.html" onclick="saveBlock()">Далее</a>
+        <div class="field">
+          <label for="opf">Организационно-правовая форма</label>
+          <select id="opf">
+            <option value="">Выберите значение</option>
+            <option value="ООО">ООО</option>
+            <option value="АО">АО</option>
+            <option value="ПАО">ПАО</option>
+            <option value="ИП">ИП</option>
+            <option value="НКО">НКО</option>
+            <option value="Иное">Иное</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="inn">ИНН</label>
+          <input id="inn" type="text" placeholder="Например 7701234567">
+        </div>
+
+        <div class="field">
+          <label for="ogrn">ОГРН / ОГРНИП</label>
+          <input id="ogrn" type="text" placeholder="Например 1027700123456">
+        </div>
+
+        <div class="field">
+          <label for="regDate">Дата регистрации</label>
+          <input id="regDate" type="date">
+        </div>
+
+        <div class="field">
+          <label for="director">Руководитель</label>
+          <input id="director" type="text" placeholder="ФИО руководителя">
+        </div>
+
+        <div class="field">
+          <label for="industry">Сфера деятельности</label>
+          <input id="industry" type="text" placeholder="Например оптовая торговля">
+        </div>
+
+        <div class="field full">
+          <label for="address">Юридический адрес</label>
+          <input id="address" type="text" placeholder="Укажите юридический адрес">
+        </div>
+
+        <div class="field full">
+          <label for="comment">Комментарий</label>
+          <textarea id="comment" placeholder="Дополнительные сведения о клиенте"></textarea>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button class="btn" type="submit">Далее</button>
+        <button class="btn secondary" type="button" onclick="clearClient()">Очистить</button>
+      </div>
+      <div class="note" id="saveMsg"></div>
+    </form>
   </section>
 </div>
-<script>
-const w=[0.07,0.07,0.10,0.08,0.05,0.10,0.07,0.10,0.10,0.05,0.05,0.08,0.08];
-function setLevel(id,v){document.getElementById(id).textContent=v===null?'—':v;}
-function compute(){
-  const ids=['c1','c2','c3','c4','c5','c6','c7','c8','c9','c10','c11','c12','c13'];
-  const vals=ids.map(id=>{
-    const v=document.getElementById(id).value;
-    return v===''?null:+v;
-  });
-  ids.forEach((id,i)=>setLevel(id+'l',vals[i]));
-  const score=vals.reduce((s,x,i)=>s+((x===null?0:x)*w[i]),0);
-  localStorage.setItem('b_client', JSON.stringify({score:score, values:vals}));
-}
-['c1','c2','c3','c4','c5','c6','c7','c8','c9','c10','c11','c12','c13'].forEach(id=>document.getElementById(id).addEventListener('change', compute));
-function saveBlock(){compute();}
-</script>
-</body>
-</html>
+
