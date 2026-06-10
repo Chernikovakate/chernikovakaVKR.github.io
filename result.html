@@ -22,6 +22,7 @@ h1{margin:0 0 8px;color:var(--primary)}
 .actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:14px}
 .btn{display:inline-block;background:var(--accent);color:#fff;padding:12px 16px;border-radius:12px;text-decoration:none;font-weight:700;border:none}
 .btn.secondary{background:#fff;color:var(--primary);border:1px solid var(--line)}
+.note{margin-top:12px;font-size:13px;color:var(--muted)}
 </style>
 </head>
 <body>
@@ -42,7 +43,6 @@ h1{margin:0 0 8px;color:var(--primary)}
     <div class="muted">Сводный риск рассчитывается автоматически на основе всех блоков.</div>
 
     <div class="box"><div class="label">Наименование организации</div><div class="value" id="company">—</div></div>
-
     <div class="box"><div class="label">Клиентские характеристики</div><div class="value" id="v1">—</div></div>
     <div class="box"><div class="label">Внешние признаки</div><div class="value" id="v2">—</div></div>
     <div class="box"><div class="label">Операционно-деловой блок</div><div class="value" id="v3">—</div></div>
@@ -55,6 +55,8 @@ h1{margin:0 0 8px;color:var(--primary)}
       <a class="btn" href="index.html">На главную</a>
       <a class="btn secondary" href="results.html">К результатам проверок</a>
     </div>
+
+    <div class="note" id="saveInfo"></div>
   </section>
 </div>
 
@@ -68,7 +70,26 @@ function read(key){
 }
 
 function fmt(x){
-  return x===null || x===undefined || isNaN(x) ? '—' : Number(x).toFixed(3);
+  return x === null || x === undefined || isNaN(x) ? '—' : Number(x).toFixed(3);
+}
+
+function getRiskMeta(total){
+  if(total >= 0.75) return {label:'Высокий', code:'high'};
+  if(total >= 0.5) return {label:'Повышенный', code:'veryhigh'};
+  if(total >= 0.25) return {label:'Умеренный', code:'medium'};
+  return {label:'Низкий', code:'low'};
+}
+
+function getResults(){
+  try{
+    return JSON.parse(localStorage.getItem('aml_results') || '[]');
+  }catch(e){
+    return [];
+  }
+}
+
+function saveResults(arr){
+  localStorage.setItem('aml_results', JSON.stringify(arr));
 }
 
 const c = read('b_client');
@@ -76,15 +97,11 @@ const e = read('b_ext');
 const o = read('b_oper');
 const f = read('b_fin');
 
-const companyName =
-  (c && c.company) ||
-  localStorage.getItem('client_name') ||
-  '—';
-
-const v1 = c ? c.score : 0;
-const v2 = e ? e.score : 0;
-const v3 = o ? o.score : 0;
-const v4 = f ? f.score : 0;
+const companyName = (c && c.company) || localStorage.getItem('client_name') || '—';
+const v1 = c && !isNaN(c.score) ? Number(c.score) : 0;
+const v2 = e && !isNaN(e.score) ? Number(e.score) : 0;
+const v3 = o && !isNaN(o.score) ? Number(o.score) : 0;
+const v4 = f && !isNaN(f.score) ? Number(f.score) : 0;
 
 document.getElementById('company').textContent = companyName;
 document.getElementById('v1').textContent = fmt(v1);
@@ -95,12 +112,47 @@ document.getElementById('v4').textContent = fmt(v4);
 const total = (v1 + v2 + v3 + v4) / 4;
 document.getElementById('total').textContent = fmt(total);
 
-let lvl = 'Низкий';
-if(total >= 0.75) lvl = 'Высокий';
-else if(total >= 0.5) lvl = 'Повышенный';
-else if(total >= 0.25) lvl = 'Умеренный';
+const risk = getRiskMeta(total);
+document.getElementById('level').textContent = risk.label;
 
-document.getElementById('level').textContent = lvl;
+function saveCurrentCheck(){
+  const entry = {
+    company: companyName,
+    level: risk.label,
+    code: risk.code,
+    total: Number(total.toFixed(6)),
+    date: new Date().toISOString(),
+    blocks: {
+      client: Number(v1.toFixed(6)),
+      external: Number(v2.toFixed(6)),
+      oper: Number(v3.toFixed(6)),
+      fin: Number(v4.toFixed(6))
+    }
+  };
+
+  const arr = getResults();
+  const last = arr.length ? arr[arr.length - 1] : null;
+
+  const isSame =
+    last &&
+    last.company === entry.company &&
+    Number(last.total) === Number(entry.total) &&
+    last.code === entry.code &&
+    Number(last.blocks.client) === Number(entry.blocks.client) &&
+    Number(last.blocks.external) === Number(entry.blocks.external) &&
+    Number(last.blocks.oper) === Number(entry.blocks.oper) &&
+    Number(last.blocks.fin) === Number(entry.blocks.fin);
+
+  if(!isSame){
+    arr.push(entry);
+    saveResults(arr);
+    document.getElementById('saveInfo').textContent = 'Результат проверки автоматически сохранён.';
+  } else {
+    document.getElementById('saveInfo').textContent = 'Этот результат уже сохранён.';
+  }
+}
+
+saveCurrentCheck();
 </script>
 </body>
 </html>
