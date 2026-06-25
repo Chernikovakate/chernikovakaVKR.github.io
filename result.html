@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Итог по компании</title>
 <style>
 :root{
@@ -277,15 +277,6 @@ th{
 </div>
 
 <script>
-const KEYS = {
-  client: 'client_data',
-  id: 'id_data',
-  oper: 'oper_data',
-  external: 'external_data',
-  fin: 'fin_data',
-  results: 'results_data'
-};
-
 const BLOCK_WEIGHTS = {
   r1: 0.30,
   r2: 0.25,
@@ -302,13 +293,21 @@ function readJSON(key){
   }
 }
 
+function firstExisting(keys){
+  for(const key of keys){
+    const data = readJSON(key);
+    if(data) return data;
+  }
+  return null;
+}
+
 function safeNumber(v){
   const n = Number(v);
   return Number.isFinite(n) ? n : 0;
 }
 
 function getClientData(){
-  const data = readJSON(KEYS.client) || {};
+  const data = firstExisting(['client_data','b_client']) || {};
   const raw = data.raw || data;
 
   return {
@@ -320,10 +319,15 @@ function getClientData(){
   };
 }
 
-function getScore(key){
-  const data = readJSON(key);
+function getBlockScore(keys){
+  const data = firstExisting(keys);
   if(!data) return 0;
-  return safeNumber(data.score);
+
+  if(typeof data.score !== 'undefined') return safeNumber(data.score);
+  if(typeof data.total !== 'undefined') return safeNumber(data.total);
+  if(typeof data.result !== 'undefined') return safeNumber(data.result);
+
+  return 0;
 }
 
 function getRiskLevel(total){
@@ -366,10 +370,10 @@ function renderCompany(client){
 function calculateResult(){
   const client = getClientData();
 
-  const r1 = getScore(KEYS.id);
-  const r2 = getScore(KEYS.oper);
-  const r3 = getScore(KEYS.external);
-  const r4 = getScore(KEYS.fin);
+  const r1 = getBlockScore(['id_data','b_id']);
+  const r2 = getBlockScore(['oper_data','b_oper']);
+  const r3 = getBlockScore(['external_data','b_external']);
+  const r4 = getBlockScore(['fin_data','b_fin']);
 
   const total =
     r1 * BLOCK_WEIGHTS.r1 +
@@ -422,7 +426,8 @@ function render(){
 function saveResult(){
   const result = render();
 
-  let list = readJSON(KEYS.results);
+  let list = readJSON('results_data');
+  if(!Array.isArray(list)) list = readJSON('checks_results');
   if(!Array.isArray(list)) list = [];
 
   const entry = {
@@ -441,7 +446,7 @@ function saveResult(){
   };
 
   list.push(entry);
-  localStorage.setItem(KEYS.results, JSON.stringify(list));
+  localStorage.setItem('results_data', JSON.stringify(list));
 
   document.getElementById('saveInfo').textContent = 'Результат успешно сохранён.';
 }
