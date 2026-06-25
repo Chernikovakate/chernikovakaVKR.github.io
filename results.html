@@ -48,7 +48,7 @@ th{color:var(--primary);background:#f7fbff}
 
   <section class="card">
     <h1>Результаты проверок</h1>
-    <div class="muted">Здесь отображается статистика по всем сохранённым проверкам, а также список самих результатов с возможностью удаления.</div>
+    <div class="muted">Здесь отображается статистика по всем сохранённым проверкам, а также список результатов с возможностью удаления.</div>
 
     <div class="stats">
       <div class="kpi"><div class="v" id="countAll">0</div><div class="l">Всего проверок</div></div>
@@ -62,10 +62,9 @@ th{color:var(--primary);background:#f7fbff}
         <label for="filterLevel"><b>Фильтр по уровню</b></label>
         <select id="filterLevel">
           <option value="all">Все</option>
-          <option value="low">Низкий</option>
-          <option value="medium">Умеренный</option>
-          <option value="veryhigh">Повышенный</option>
-          <option value="high">Высокий</option>
+          <option value="Низкий риск">Низкий риск</option>
+          <option value="Умеренный риск">Умеренный риск</option>
+          <option value="Высокий риск">Высокий риск</option>
         </select>
       </div>
 
@@ -95,14 +94,14 @@ th{color:var(--primary);background:#f7fbff}
 <script>
 function getResults(){
   try{
-    return JSON.parse(localStorage.getItem('aml_results') || '[]');
+    return JSON.parse(localStorage.getItem('checks_results') || '[]');
   }catch(e){
     return [];
   }
 }
 
 function saveResults(arr){
-  localStorage.setItem('aml_results', JSON.stringify(arr));
+  localStorage.setItem('checks_results', JSON.stringify(arr));
 }
 
 function esc(s){
@@ -118,14 +117,14 @@ function render(){
 
   const data = all.map((x, idx) => ({x, idx})).filter(obj => {
     const x = obj.x;
-    const okF = filter === 'all' || x.code === filter;
+    const okF = filter === 'all' || x.level === filter;
     const okQ = !q || String(x.company || '').toLowerCase().includes(q);
     return okF && okQ;
   });
 
   const total = all.length;
-  const high = all.filter(x => x.code === 'high').length;
-  const medium = all.filter(x => x.code === 'medium' || x.code === 'veryhigh' || x.code === 'high').length;
+  const high = all.filter(x => x.level === 'Высокий риск').length;
+  const medium = all.filter(x => x.level === 'Умеренный риск' || x.level === 'Высокий риск').length;
   const avg = total ? all.reduce((s, x) => s + (+x.total || 0), 0) / total : 0;
 
   document.getElementById('countAll').textContent = total;
@@ -145,7 +144,7 @@ function render(){
       <td>${esc(obj.x.company || '')}</td>
       <td>${esc(obj.x.level || '')}</td>
       <td class="right">${Number(obj.x.total || 0).toFixed(6)}</td>
-      <td>${obj.x.date ? new Date(obj.x.date).toLocaleString('ru-RU') : ''}</td>
+      <td>${esc(obj.x.date || '')}</td>
       <td><button class="btn del" type="button" onclick="delOne(${obj.idx})">Удалить</button></td>
     </tr>
   `).join('');
@@ -159,7 +158,7 @@ function delOne(i){
 }
 
 function clearAll(){
-  localStorage.removeItem('aml_results');
+  localStorage.removeItem('checks_results');
   render();
 }
 
