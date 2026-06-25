@@ -1,459 +1,440 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Итог по компании</title>
-<style>
-:root{
-  --bg:#ffffff;
-  --card:#ffffff;
-  --text:#0047AB;
-  --primary:#0047AB;
-  --accent:#F28C28;
-  --line:#d9e3f4;
-  --muted:#6b7fa4;
-  --low-bg:#eef8f0;
-  --low-text:#2e8b57;
-  --med-bg:#fff7e8;
-  --med-text:#c47a00;
-  --vh-bg:#fff1e7;
-  --vh-text:#e67e22;
-  --high-bg:#fdeeee;
-  --high-text:#c0392b;
-}
-*{box-sizing:border-box}
-body{
-  margin:0;
-  font-family:Arial,Helvetica,sans-serif;
-  background:var(--bg);
-  color:var(--text);
-}
-.wrap{
-  max-width:1200px;
-  margin:0 auto;
-  padding:24px;
-}
-.nav{
-  display:flex;
-  gap:10px;
-  flex-wrap:wrap;
-  margin-bottom:18px;
-}
-.nav a{
-  color:var(--text);
-  text-decoration:none;
-  padding:10px 14px;
-  border:1px solid var(--line);
-  border-radius:12px;
-  background:#fff;
-}
-.nav a.active{
-  font-weight:700;
-}
-.card{
-  background:var(--card);
-  border:1px solid var(--line);
-  border-radius:18px;
-  padding:20px;
-  margin-bottom:16px;
-}
-h1,h2{
-  margin:0 0 8px;
-  color:var(--primary);
-}
-.muted{
-  color:var(--muted);
-}
-.hero{
-  display:grid;
-  grid-template-columns:1.2fr .8fr;
-  gap:16px;
-  margin-top:16px;
-}
-.box{
-  border:1px solid var(--line);
-  border-radius:18px;
-  padding:20px;
-  background:#fff;
-}
-.company{
-  font-size:28px;
-  font-weight:800;
-  margin-top:6px;
-  color:var(--primary);
-}
-.score-big{
-  font-size:42px;
-  font-weight:800;
-  margin-top:10px;
-  color:var(--primary);
-}
-.badge{
-  display:inline-block;
-  margin-top:12px;
-  padding:10px 14px;
-  border-radius:999px;
-  font-weight:700;
-}
-.badge.low{background:var(--low-bg);color:var(--low-text)}
-.badge.medium{background:var(--med-bg);color:var(--med-text)}
-.badge.veryhigh{background:var(--vh-bg);color:var(--vh-text)}
-.badge.high{background:var(--high-bg);color:var(--high-text)}
-.grid4{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:12px;
-  margin-top:14px;
-}
-.kpi{
-  border:1px solid var(--line);
-  border-radius:16px;
-  padding:14px;
-}
-.kpi .name{
-  font-size:13px;
-  color:var(--muted);
-  margin-bottom:8px;
-}
-.kpi .val{
-  font-size:24px;
-  font-weight:800;
-  color:var(--primary);
-}
-.grid2{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:16px;
-}
-table{
-  width:100%;
-  border-collapse:collapse;
-  margin-top:12px;
-  border:1px solid var(--line);
-  border-radius:16px;
-  overflow:hidden;
-  background:#fff;
-}
-th,td{
-  padding:12px 10px;
-  border-bottom:1px solid var(--line);
-  text-align:left;
-}
-th{
-  color:var(--primary);
-  background:#f7fbff;
-}
-.right{text-align:right}
-.btns{
-  display:flex;
-  gap:12px;
-  flex-wrap:wrap;
-  margin-top:16px;
-}
-.btn{
-  background:var(--accent);
-  color:#fff;
-  border:none;
-  border-radius:12px;
-  padding:12px 16px;
-  font-weight:700;
-  cursor:pointer;
-  text-decoration:none;
-  display:inline-block;
-}
-.btn.sec{
-  background:#fff;
-  color:var(--primary);
-  border:1px solid var(--line);
-}
-.note{
-  margin-top:12px;
-  color:var(--muted);
-  font-size:14px;
-}
-@media(max-width:980px){
-  .hero,.grid2{grid-template-columns:1fr}
-  .grid4{grid-template-columns:1fr 1fr}
-}
-@media(max-width:640px){
-  .grid4{grid-template-columns:1fr}
-}
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Итог по компании</title>
+  <style>
+    :root{
+      --bg:#ffffff;
+      --card:#ffffff;
+      --text:#0047AB;
+      --primary:#0047AB;
+      --accent:#F28C28;
+      --line:#d9e3f4;
+      --muted:#6b7fa4;
+      --low-bg:#eef8f0;
+      --low-text:#2e8b57;
+      --med-bg:#fff7e8;
+      --med-text:#c47a00;
+      --high-bg:#fdeeee;
+      --high-text:#c0392b;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:Arial,Helvetica,sans-serif;
+      background:var(--bg);
+      color:var(--text);
+    }
+    .wrap{
+      max-width:1200px;
+      margin:0 auto;
+      padding:24px;
+    }
+    .nav{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-bottom:18px;
+    }
+    .nav a{
+      color:var(--text);
+      text-decoration:none;
+      padding:10px 14px;
+      border:1px solid var(--line);
+      border-radius:12px;
+      background:#fff;
+    }
+    .nav a.active{
+      font-weight:700;
+    }
+    .card{
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:18px;
+      padding:20px;
+      margin-bottom:16px;
+    }
+    h1,h2{
+      margin:0 0 8px;
+      color:var(--primary);
+    }
+    .muted{
+      color:var(--muted);
+    }
+    .hero{
+      display:grid;
+      grid-template-columns:1.2fr .8fr;
+      gap:16px;
+      margin-top:16px;
+    }
+    .box{
+      border:1px solid var(--line);
+      border-radius:18px;
+      padding:20px;
+      background:#fff;
+    }
+    .company{
+      font-size:28px;
+      font-weight:800;
+      margin-top:6px;
+      color:var(--primary);
+    }
+    .score-big{
+      font-size:42px;
+      font-weight:800;
+      margin-top:10px;
+      color:var(--primary);
+    }
+    .badge{
+      display:inline-block;
+      margin-top:12px;
+      padding:10px 14px;
+      border-radius:999px;
+      font-weight:700;
+    }
+    .badge.low{background:var(--low-bg);color:var(--low-text)}
+    .badge.medium{background:var(--med-bg);color:var(--med-text)}
+    .badge.high{background:var(--high-bg);color:var(--high-text)}
+    .grid4{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:12px;
+      margin-top:14px;
+    }
+    .kpi{
+      border:1px solid var(--line);
+      border-radius:16px;
+      padding:14px;
+    }
+    .kpi .name{
+      font-size:13px;
+      color:var(--muted);
+      margin-bottom:8px;
+    }
+    .kpi .val{
+      font-size:24px;
+      font-weight:800;
+      color:var(--primary);
+    }
+    .grid2{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:16px;
+    }
+    table{
+      width:100%;
+      border-collapse:collapse;
+      margin-top:12px;
+      border:1px solid var(--line);
+      overflow:hidden;
+      background:#fff;
+      border-radius:16px;
+    }
+    th,td{
+      padding:12px 10px;
+      border-bottom:1px solid var(--line);
+      text-align:left;
+    }
+    th{
+      color:var(--primary);
+      background:#f7fbff;
+    }
+    .right{text-align:right}
+    .btns{
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+      margin-top:16px;
+    }
+    .btn{
+      background:var(--accent);
+      color:#fff;
+      border:none;
+      border-radius:12px;
+      padding:12px 16px;
+      font-weight:700;
+      cursor:pointer;
+      text-decoration:none;
+      display:inline-block;
+    }
+    .btn.sec{
+      background:#fff;
+      color:var(--primary);
+      border:1px solid var(--line);
+    }
+    .note{
+      margin-top:12px;
+      color:var(--muted);
+      font-size:14px;
+    }
+    @media(max-width:980px){
+      .hero,.grid2{grid-template-columns:1fr}
+      .grid4{grid-template-columns:1fr 1fr}
+    }
+    @media(max-width:640px){
+      .grid4{grid-template-columns:1fr}
+    }
+  </style>
 </head>
 <body>
-<div class="wrap">
-  <div class="nav">
-    <a href="index.html">Главная</a>
-    <a href="client.html">Карточка клиента</a>
-    <a href="id.html">Идентификационный блок</a>
-    <a href="oper.html">Операционный блок</a>
-    <a href="fin.html">Финансовый блок</a>
-    <a href="external.html">Внешний блок</a>
-    <a href="results.html">Результаты проверок</a>
-    <a class="active" href="result.html">Итог</a>
+  <div class="wrap">
+    <div class="nav">
+      <a href="index.html">Главная</a>
+      <a href="client.html">Карточка клиента</a>
+      <a href="id.html">Идентификационный блок</a>
+      <a href="oper.html">Операционный блок</a>
+      <a href="fin.html">Финансовый блок</a>
+      <a href="external.html">Внешний блок</a>
+      <a href="results.html">Результаты проверок</a>
+      <a class="active" href="result.html">Итог</a>
+    </div>
+
+    <section class="card">
+      <h1>Итог по компании</h1>
+      <div class="muted">Сводная оценка клиентского риска на основе результатов всех блоков анкеты.</div>
+
+      <div class="hero">
+        <div class="box">
+          <div class="muted">Организация</div>
+          <div class="company" id="companyName">—</div>
+          <div class="note" id="companyMeta">ИНН: — | ОГРН: —</div>
+
+          <div style="margin-top:18px" class="muted">Интегральный показатель</div>
+          <div class="score-big" id="totalScore">0.000000</div>
+          <div id="riskBadge" class="badge low">Низкий риск</div>
+        </div>
+
+        <div class="box">
+          <h2 style="font-size:22px;">Показатели по блокам</h2>
+          <div class="grid4">
+            <div class="kpi">
+              <div class="name">R1 Идентификационный</div>
+              <div class="val" id="r1Score">0.000</div>
+            </div>
+            <div class="kpi">
+              <div class="name">R2 Операционный</div>
+              <div class="val" id="r2Score">0.000</div>
+            </div>
+            <div class="kpi">
+              <div class="name">R3 Внешний</div>
+              <div class="val" id="r3Score">0.000</div>
+            </div>
+            <div class="kpi">
+              <div class="name">R4 Финансовый</div>
+              <div class="val" id="r4Score">0.000</div>
+            </div>
+          </div>
+          <div class="note">Формула расчёта: R = 0,30R1 + 0,25R2 + 0,25R3 + 0,20R4</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="grid2">
+      <div class="card">
+        <h2>Реквизиты клиента</h2>
+        <table>
+          <tbody>
+            <tr><th>Наименование</th><td id="tblCompany">—</td></tr>
+            <tr><th>ИНН</th><td id="tblInn">—</td></tr>
+            <tr><th>ОГРН</th><td id="tblOgrn">—</td></tr>
+            <tr><th>ОКВЭД</th><td id="tblOkved">—</td></tr>
+            <tr><th>Регион</th><td id="tblRegion">—</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="card">
+        <h2>Рекомендация</h2>
+        <div id="decisionText" class="note" style="font-size:16px;color:var(--text);margin-top:6px;">—</div>
+        <div class="btns">
+          <button class="btn" type="button" id="saveBtn">Сохранить результат</button>
+          <a class="btn sec" href="results.html">Открыть результаты проверок</a>
+        </div>
+        <div class="note" id="saveInfo">После сохранения результат появится в журнале проверок.</div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Структура интегрального показателя</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Блок</th>
+            <th>Обозначение</th>
+            <th class="right">Значение блока</th>
+            <th class="right">Вес</th>
+            <th class="right">Вклад в итог</th>
+          </tr>
+        </thead>
+        <tbody id="detailBody"></tbody>
+      </table>
+    </section>
   </div>
 
-  <section class="card">
-    <h1>Итог по компании</h1>
-    <div class="muted">Сводная оценка клиентского риска на основе результатов всех блоков анкеты.</div>
+  <script>
+    const BLOCK_WEIGHTS = {
+      r1: 0.30,
+      r2: 0.25,
+      r3: 0.25,
+      r4: 0.20
+    };
 
-    <div class="hero">
-      <div class="box">
-        <div class="muted">Организация</div>
-        <div class="company" id="companyName">—</div>
-        <div class="note" id="companyMeta">ИНН: — | ОГРН: —</div>
+    function readJSON(key){
+      try{
+        const raw = localStorage.getItem(key);
+        return raw ? JSON.parse(raw) : null;
+      }catch(e){
+        return null;
+      }
+    }
 
-        <div style="margin-top:18px" class="muted">Интегральный показатель</div>
-        <div class="score-big" id="totalScore">0.000000</div>
-        <div id="riskBadge" class="badge low">Низкий риск</div>
-      </div>
+    function toNum(val){
+      if(val === null || val === undefined || val === '') return 0;
+      const n = Number(String(val).replace(',', '.'));
+      return Number.isFinite(n) ? n : 0;
+    }
 
-      <div class="box">
-        <h2 style="font-size:22px;">Показатели по блокам</h2>
-        <div class="grid4">
-          <div class="kpi">
-            <div class="name">R1 Идентификационный</div>
-            <div class="val" id="r1Score">0.000</div>
-          </div>
-          <div class="kpi">
-            <div class="name">R2 Операционный</div>
-            <div class="val" id="r2Score">0.000</div>
-          </div>
-          <div class="kpi">
-            <div class="name">R3 Внешний</div>
-            <div class="val" id="r3Score">0.000</div>
-          </div>
-          <div class="kpi">
-            <div class="name">R4 Финансовый</div>
-            <div class="val" id="r4Score">0.000</div>
-          </div>
-        </div>
-        <div class="note">Формула расчёта: R = 0,30R1 + 0,25R2 + 0,25R3 + 0,20R4</div>
-      </div>
-    </div>
-  </section>
+    function getClient(){
+      const data = readJSON('b_client') || {};
+      const raw = data.raw || data;
 
-  <section class="grid2">
-    <div class="card">
-      <h2>Реквизиты клиента</h2>
-      <table>
-        <tbody>
-          <tr><th>Наименование</th><td id="tblCompany">—</td></tr>
-          <tr><th>ИНН</th><td id="tblInn">—</td></tr>
-          <tr><th>ОГРН</th><td id="tblOgrn">—</td></tr>
-          <tr><th>ОКВЭД</th><td id="tblOkved">—</td></tr>
-          <tr><th>Регион</th><td id="tblRegion">—</td></tr>
-        </tbody>
-      </table>
-    </div>
+      return {
+        company: raw.companyName || raw.name || raw.company || 'Без названия',
+        inn: raw.inn || '—',
+        ogrn: raw.ogrn || '—',
+        okved: raw.okved || '—',
+        region: raw.region || '—'
+      };
+    }
 
-    <div class="card">
-      <h2>Рекомендация</h2>
-      <div id="decisionText" class="note" style="font-size:16px;color:var(--text);margin-top:6px;">—</div>
-      <div class="btns">
-        <button class="btn" type="button" id="saveBtn">Сохранить результат</button>
-        <a class="btn sec" href="results.html">Открыть результаты проверок</a>
-      </div>
-      <div class="note" id="saveInfo">После сохранения результат появится в журнале проверок.</div>
-    </div>
-  </section>
+    function getBlock(key){
+      const data = readJSON(key) || {};
 
-  <section class="card">
-    <h2>Структура интегрального показателя</h2>
-    <table>
-      <thead>
-        <tr>
-          <th>Блок</th>
-          <th>Обозначение</th>
-          <th class="right">Значение блока</th>
-          <th class="right">Вес</th>
-          <th class="right">Вклад в итог</th>
-        </tr>
-      </thead>
-      <tbody id="detailBody"></tbody>
-    </table>
-  </section>
-</div>
+      if(typeof data.score !== 'undefined') return toNum(data.score);
+      if(typeof data.total !== 'undefined') return toNum(data.total);
+      if(typeof data.result !== 'undefined') return toNum(data.result);
 
-<script>
-const BLOCK_WEIGHTS = {
-  r1: 0.30,
-  r2: 0.25,
-  r3: 0.25,
-  r4: 0.20
-};
+      return 0;
+    }
 
-function readJSON(key){
-  try{
-    const raw = localStorage.getItem(key);
-    return raw ? JSON.parse(raw) : null;
-  }catch(e){
-    return null;
-  }
-}
+    function getRisk(total){
+      if(total <= 0.25){
+        return { label:'Низкий риск', className:'low' };
+      }
+      if(total <= 0.50){
+        return { label:'Умеренный риск', className:'medium' };
+      }
+      return { label:'Высокий риск', className:'high' };
+    }
 
-function firstExisting(keys){
-  for(const key of keys){
-    const data = readJSON(key);
-    if(data) return data;
-  }
-  return null;
-}
+    function getDecision(total){
+      if(total <= 0.25){
+        return 'Рекомендуется стандартный порядок приема клиента на обслуживание и стандартный последующий мониторинг.';
+      }
+      if(total <= 0.50){
+        return 'Рекомендуется дополнительная проверка отдельных сведений о клиенте и повышенное внимание при дальнейшем сопровождении.';
+      }
+      return 'Рекомендуется углубленная проверка клиента и применение усиленных мер внутреннего контроля до принятия решения о приеме на обслуживание.';
+    }
 
-function safeNumber(v){
-  const n = Number(v);
-  return Number.isFinite(n) ? n : 0;
-}
+    function render(){
+      const client = getClient();
 
-function getClientData(){
-  const data = firstExisting(['client_data','b_client']) || {};
-  const raw = data.raw || data;
+      const r1 = getBlock('b_id');
+      const r2 = getBlock('b_oper');
+      const r3 = getBlock('b_external');
+      const r4 = getBlock('b_fin');
 
-  return {
-    company: raw.companyName || raw.company || raw.name || 'Без названия',
-    inn: raw.inn || '—',
-    ogrn: raw.ogrn || '—',
-    okved: raw.okved || '—',
-    region: raw.region || '—'
-  };
-}
+      const total =
+        r1 * BLOCK_WEIGHTS.r1 +
+        r2 * BLOCK_WEIGHTS.r2 +
+        r3 * BLOCK_WEIGHTS.r3 +
+        r4 * BLOCK_WEIGHTS.r4;
 
-function getBlockScore(keys){
-  const data = firstExisting(keys);
-  if(!data) return 0;
+      const risk = getRisk(total);
 
-  if(typeof data.score !== 'undefined') return safeNumber(data.score);
-  if(typeof data.total !== 'undefined') return safeNumber(data.total);
-  if(typeof data.result !== 'undefined') return safeNumber(data.result);
+      document.getElementById('companyName').textContent = client.company;
+      document.getElementById('companyMeta').textContent = 'ИНН: ' + client.inn + ' | ОГРН: ' + client.ogrn;
 
-  return 0;
-}
+      document.getElementById('tblCompany').textContent = client.company;
+      document.getElementById('tblInn').textContent = client.inn;
+      document.getElementById('tblOgrn').textContent = client.ogrn;
+      document.getElementById('tblOkved').textContent = client.okved;
+      document.getElementById('tblRegion').textContent = client.region;
 
-function getRiskLevel(total){
-  if(total <= 0.25){
-    return { code:'low', label:'Низкий риск', className:'low' };
-  }
-  if(total <= 0.50){
-    return { code:'medium', label:'Умеренный риск', className:'medium' };
-  }
-  if(total <= 1.00){
-    return { code:'veryhigh', label:'Повышенный риск', className:'veryhigh' };
-  }
-  return { code:'high', label:'Высокий риск', className:'high' };
-}
+      document.getElementById('r1Score').textContent = r1.toFixed(3);
+      document.getElementById('r2Score').textContent = r2.toFixed(3);
+      document.getElementById('r3Score').textContent = r3.toFixed(3);
+      document.getElementById('r4Score').textContent = r4.toFixed(3);
+      document.getElementById('totalScore').textContent = total.toFixed(6);
 
-function getDecision(code){
-  if(code === 'low'){
-    return 'Рекомендуется стандартный порядок приема клиента на обслуживание и стандартный последующий мониторинг.';
-  }
-  if(code === 'medium'){
-    return 'Рекомендуется прием на обслуживание с дополнительной проверкой отдельных сведений и повышенным вниманием при сопровождении.';
-  }
-  if(code === 'veryhigh'){
-    return 'Рекомендуется проведение углубленной проверки клиента и дополнительный анализ документов до принятия окончательного решения.';
-  }
-  return 'Рекомендуется усиленная проверка и рассмотрение вопроса о целесообразности приема клиента на обслуживание в рамках внутренних процедур контроля.';
-}
+      const badge = document.getElementById('riskBadge');
+      badge.textContent = risk.label;
+      badge.className = 'badge ' + risk.className;
 
-function renderCompany(client){
-  document.getElementById('companyName').textContent = client.company;
-  document.getElementById('companyMeta').textContent = 'ИНН: ' + client.inn + ' | ОГРН: ' + client.ogrn;
+      document.getElementById('decisionText').textContent = getDecision(total);
 
-  document.getElementById('tblCompany').textContent = client.company;
-  document.getElementById('tblInn').textContent = client.inn;
-  document.getElementById('tblOgrn').textContent = client.ogrn;
-  document.getElementById('tblOkved').textContent = client.okved;
-  document.getElementById('tblRegion').textContent = client.region;
-}
+      const rows = [
+        ['Идентификационный блок', 'R1', r1, BLOCK_WEIGHTS.r1, r1 * BLOCK_WEIGHTS.r1],
+        ['Операционный блок', 'R2', r2, BLOCK_WEIGHTS.r2, r2 * BLOCK_WEIGHTS.r2],
+        ['Внешний блок', 'R3', r3, BLOCK_WEIGHTS.r3, r3 * BLOCK_WEIGHTS.r3],
+        ['Финансовый блок', 'R4', r4, BLOCK_WEIGHTS.r4, r4 * BLOCK_WEIGHTS.r4]
+      ];
 
-function calculateResult(){
-  const client = getClientData();
+      document.getElementById('detailBody').innerHTML = rows.map(function(row){
+        return '<tr>' +
+          '<td>' + row[0] + '</td>' +
+          '<td>' + row[1] + '</td>' +
+          '<td class="right">' + row[2].toFixed(3) + '</td>' +
+          '<td class="right">' + row[3].toFixed(2) + '</td>' +
+          '<td class="right">' + row[4].toFixed(6) + '</td>' +
+        '</tr>';
+      }).join('');
+    }
 
-  const r1 = getBlockScore(['id_data','b_id']);
-  const r2 = getBlockScore(['oper_data','b_oper']);
-  const r3 = getBlockScore(['external_data','b_external']);
-  const r4 = getBlockScore(['fin_data','b_fin']);
+    function saveResult(){
+      const client = getClient();
 
-  const total =
-    r1 * BLOCK_WEIGHTS.r1 +
-    r2 * BLOCK_WEIGHTS.r2 +
-    r3 * BLOCK_WEIGHTS.r3 +
-    r4 * BLOCK_WEIGHTS.r4;
+      const r1 = getBlock('b_id');
+      const r2 = getBlock('b_oper');
+      const r3 = getBlock('b_external');
+      const r4 = getBlock('b_fin');
 
-  const risk = getRiskLevel(total);
+      const total =
+        r1 * BLOCK_WEIGHTS.r1 +
+        r2 * BLOCK_WEIGHTS.r2 +
+        r3 * BLOCK_WEIGHTS.r3 +
+        r4 * BLOCK_WEIGHTS.r4;
 
-  return { client, r1, r2, r3, r4, total, risk };
-}
+      const risk = getRisk(total);
 
-function render(){
-  const result = calculateResult();
+      let list = readJSON('checks_results');
+      if(!Array.isArray(list)) list = [];
 
-  renderCompany(result.client);
+      list.push({
+        id: 'res_' + Date.now(),
+        company: client.company,
+        inn: client.inn,
+        ogrn: client.ogrn,
+        r1: r1,
+        r2: r2,
+        r3: r3,
+        r4: r4,
+        total: total,
+        level: risk.label,
+        date: new Date().toLocaleString('ru-RU')
+      });
 
-  document.getElementById('r1Score').textContent = result.r1.toFixed(3);
-  document.getElementById('r2Score').textContent = result.r2.toFixed(3);
-  document.getElementById('r3Score').textContent = result.r3.toFixed(3);
-  document.getElementById('r4Score').textContent = result.r4.toFixed(3);
-  document.getElementById('totalScore').textContent = result.total.toFixed(6);
+      localStorage.setItem('checks_results', JSON.stringify(list));
+      document.getElementById('saveInfo').textContent = 'Результат успешно сохранён.';
+    }
 
-  const badge = document.getElementById('riskBadge');
-  badge.textContent = result.risk.label;
-  badge.className = 'badge ' + result.risk.className;
+    document.getElementById('saveBtn').addEventListener('click', saveResult);
 
-  document.getElementById('decisionText').textContent = getDecision(result.risk.code);
-
-  const rows = [
-    ['Идентификационный блок', 'R1', result.r1, BLOCK_WEIGHTS.r1, result.r1 * BLOCK_WEIGHTS.r1],
-    ['Операционный блок', 'R2', result.r2, BLOCK_WEIGHTS.r2, result.r2 * BLOCK_WEIGHTS.r2],
-    ['Внешний блок', 'R3', result.r3, BLOCK_WEIGHTS.r3, result.r3 * BLOCK_WEIGHTS.r3],
-    ['Финансовый блок', 'R4', result.r4, BLOCK_WEIGHTS.r4, result.r4 * BLOCK_WEIGHTS.r4]
-  ];
-
-  document.getElementById('detailBody').innerHTML = rows.map(function(row){
-    return '<tr>' +
-      '<td>' + row[0] + '</td>' +
-      '<td>' + row[1] + '</td>' +
-      '<td class="right">' + row[2].toFixed(3) + '</td>' +
-      '<td class="right">' + row[3].toFixed(2) + '</td>' +
-      '<td class="right">' + row[4].toFixed(6) + '</td>' +
-    '</tr>';
-  }).join('');
-
-  return result;
-}
-
-function saveResult(){
-  const result = render();
-
-  let list = readJSON('results_data');
-  if(!Array.isArray(list)) list = readJSON('checks_results');
-  if(!Array.isArray(list)) list = [];
-
-  const entry = {
-    id: 'res_' + Date.now() + '_' + Math.random().toString(36).slice(2,8),
-    company: result.client.company,
-    inn: result.client.inn,
-    ogrn: result.client.ogrn,
-    level: result.risk.label,
-    code: result.risk.code,
-    total: result.total,
-    r1: result.r1,
-    r2: result.r2,
-    r3: result.r3,
-    r4: result.r4,
-    date: new Date().toISOString()
-  };
-
-  list.push(entry);
-  localStorage.setItem('results_data', JSON.stringify(list));
-
-  document.getElementById('saveInfo').textContent = 'Результат успешно сохранён.';
-}
-
-document.getElementById('saveBtn').addEventListener('click', saveResult);
-
-render();
-</script>
+    render();
+  </script>
 </body>
 </html>
+ 
