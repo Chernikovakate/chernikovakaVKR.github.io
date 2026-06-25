@@ -15,7 +15,7 @@ body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:
 .card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:20px;margin-bottom:16px}
 h1{margin:0 0 8px;color:var(--primary)}
 .muted{color:var(--muted)}
-.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:16px}
+.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:16px}
 .kpi{border:1px solid var(--line);border-radius:16px;padding:16px;background:#fff}
 .kpi .v{font-size:28px;font-weight:800;color:var(--primary)}
 .kpi .l{font-size:14px;color:var(--muted);margin-top:4px}
@@ -29,7 +29,6 @@ th,td{padding:12px 10px;border-bottom:1px solid var(--line);text-align:left}
 th{color:var(--primary);background:#f7fbff}
 .right{text-align:right}
 .small{font-size:13px;color:var(--muted)}
-@media(max-width:900px){.stats{grid-template-columns:1fr 1fr}}
 @media(max-width:650px){.stats{grid-template-columns:1fr}}
 </style>
 </head>
@@ -48,12 +47,10 @@ th{color:var(--primary);background:#f7fbff}
 
   <section class="card">
     <h1>Результаты проверок</h1>
-    <div class="muted">Здесь отображается статистика по всем сохранённым проверкам, а также список результатов с возможностью удаления.</div>
+    <div class="muted">Здесь отображается статистика по всем сохранённым проверкам и список результатов с возможностью удаления.</div>
 
     <div class="stats">
       <div class="kpi"><div class="v" id="countAll">0</div><div class="l">Всего проверок</div></div>
-      <div class="kpi"><div class="v" id="countHigh">0</div><div class="l">Высокий риск</div></div>
-      <div class="kpi"><div class="v" id="countMedium">0</div><div class="l">Умеренный и выше</div></div>
       <div class="kpi"><div class="v" id="avgScore">0.000000</div><div class="l">Средний показатель</div></div>
     </div>
 
@@ -82,7 +79,6 @@ th{color:var(--primary);background:#f7fbff}
           <th>Название организации</th>
           <th>Уровень риска</th>
           <th class="right">Интегральный показатель</th>
-          <th>Дата</th>
           <th></th>
         </tr>
       </thead>
@@ -123,19 +119,15 @@ function render(){
   });
 
   const total = all.length;
-  const high = all.filter(x => x.level === 'Высокий риск').length;
-  const medium = all.filter(x => x.level === 'Умеренный риск' || x.level === 'Высокий риск').length;
   const avg = total ? all.reduce((s, x) => s + (+x.total || 0), 0) / total : 0;
 
   document.getElementById('countAll').textContent = total;
-  document.getElementById('countHigh').textContent = high;
-  document.getElementById('countMedium').textContent = medium;
   document.getElementById('avgScore').textContent = avg.toFixed(6);
 
   const tbody = document.getElementById('tbody');
 
   if(!data.length){
-    tbody.innerHTML = '<tr><td colspan="5" class="small">Нет записей по выбранному фильтру.</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="4" class="small">Нет записей по выбранному фильтру.</td></tr>';
     return;
   }
 
@@ -144,7 +136,6 @@ function render(){
       <td>${esc(obj.x.company || '')}</td>
       <td>${esc(obj.x.level || '')}</td>
       <td class="right">${Number(obj.x.total || 0).toFixed(6)}</td>
-      <td>${esc(obj.x.date || '')}</td>
       <td><button class="btn del" type="button" onclick="delOne(${obj.idx})">Удалить</button></td>
     </tr>
   `).join('');
