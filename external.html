@@ -15,10 +15,11 @@ body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:
 .card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:20px;margin-bottom:16px}
 h1{margin:0 0 8px;color:var(--primary)}
 .muted{color:var(--muted)}
-.row{display:grid;grid-template-columns:1fr 180px 120px 120px;gap:10px;align-items:center;margin:12px 0}
+.row{display:grid;grid-template-columns:1fr 280px 120px 120px;gap:10px;align-items:center;margin:12px 0}
 .row select{width:100%;padding:10px 12px;border-radius:12px;background:#fff;color:var(--primary);border:1px solid var(--line)}
 .score,.level{font-weight:700;color:var(--primary)}
 .btn{display:inline-block;margin-top:14px;background:var(--accent);color:#fff;padding:12px 16px;border-radius:12px;text-decoration:none;font-weight:700;border:none}
+.total{margin-top:18px;padding-top:16px;border-top:1px solid var(--line);font-weight:700;color:var(--primary)}
 @media(max-width:1100px){.row{grid-template-columns:1fr 1fr}}
 @media(max-width:700px){.row{grid-template-columns:1fr}}
 </style>
@@ -36,28 +37,107 @@ h1{margin:0 0 8px;color:var(--primary)}
 
   <section class="card">
     <h1>Внешние качественные признаки</h1>
-    <div class="muted">Качественные индикаторы фиксируются как да/нет или по трехуровневой шкале и сразу переводятся в баллы по весам.</div>
+    <div class="muted">Качественные индикаторы фиксируются по шкале и автоматически переводятся в итоговый балл внешнего блока.</div>
 
-    
-    <div class="row"><div>Сайт клиента внесён в реестр запрещённых сайтов Роскомнадзора</div><select id="e2"><option value="0">Нет</option><option value="1">Да</option></select><div class="level" id="e2l">—</div><div class="score">0.3</div></div>
-    <div class="row"><div>Негативная информация в СМИ / расследования</div><select id="e3"><option value="0">Нет</option><option value="1">Единичные упоминания</option><option value="2">Множественные публикации / расследования</option></select><div class="level" id="e3l">—</div><div class="score">0.25</div></div>
-    <div class="row"><div>Наличие неисполненных судебных решений, где клиент выступает ответчиком</div><select id="e4"><option value="0">Нет/незначительно</option><option value="1">5–25% активов</option><option value="2">&gt;25% или вывод имущества</option></select><div class="level" id="e4l">—</div><div class="score">0.25</div></div>
-   
+    <div class="row">
+      <div>Сайт клиента внесён в реестр запрещённых сайтов Роскомнадзора</div>
+      <select id="e1">
+        <option value="0">Нет</option>
+        <option value="1">Да</option>
+      </select>
+      <div class="level" id="e1l">0</div>
+      <div class="score">0.30</div>
+    </div>
+
+    <div class="row">
+      <div>Негативная информация в СМИ / расследования</div>
+      <select id="e2">
+        <option value="0">Нет</option>
+        <option value="1">Единичные упоминания</option>
+        <option value="2">Множественные публикации / расследования</option>
+      </select>
+      <div class="level" id="e2l">0</div>
+      <div class="score">0.25</div>
+    </div>
+
+    <div class="row">
+      <div>Наличие неисполненных судебных решений, где клиент выступает ответчиком</div>
+      <select id="e3">
+        <option value="0">Нет / незначительно</option>
+        <option value="1">5–25% активов</option>
+        <option value="2">&gt;25% активов или вывод имущества</option>
+      </select>
+      <div class="level" id="e3l">0</div>
+      <div class="score">0.25</div>
+    </div>
+
+    <div class="row">
+      <div>Наличие иностранных контрагентов</div>
+      <select id="e4">
+        <option value="0">Нет</option>
+        <option value="1">Есть иностранные контрагенты</option>
+        <option value="2">Есть контрагенты из юрисдикций повышенного риска / санкционно чувствительных стран</option>
+      </select>
+      <div class="level" id="e4l">0</div>
+      <div class="score">0.20</div>
+    </div>
+
+    <div class="total">Итоговый балл внешнего блока: <span id="blockScore">0.000</span></div>
+
     <a class="btn" href="oper.html" onclick="saveBlock()">Далее</a>
   </section>
 </div>
+
 <script>
-const w=[0.22,0.18,0.20,0.20,0.20];
-function setLevel(id,v){document.getElementById(id).textContent=v===null?'—':v;}
-function compute(){
-  const ids=['e1','e2','e3','e4','e5'];
-  const vals=ids.map(id=>{const v=document.getElementById(id).value; return v===''?null:+v;});
-  ids.forEach((id,i)=>setLevel(id+'l',vals[i]));
-  const score=vals.reduce((s,x,i)=>s+((x===null?0:x)*w[i]),0);
-  localStorage.setItem('b_ext', JSON.stringify({score:score, values:vals}));
+const weights = [0.30, 0.25, 0.25, 0.20];
+const ids = ['e1','e2','e3','e4'];
+
+function setLevel(id, v){
+  document.getElementById(id).textContent = v;
 }
-['e1','e2','e3','e4','e5'].forEach(id=>document.getElementById(id).addEventListener('change', compute));
-function saveBlock(){compute();}
+
+function normalize(v, max){
+  return max === 0 ? 0 : v / max;
+}
+
+function compute(){
+  const rawVals = [
+    Number(document.getElementById('e1').value || 0),
+    Number(document.getElementById('e2').value || 0),
+    Number(document.getElementById('e3').value || 0),
+    Number(document.getElementById('e4').value || 0)
+  ];
+
+  rawVals.forEach((v, i) => setLevel(ids[i] + 'l', v));
+
+  const normalized = [
+    normalize(rawVals[0], 1),
+    normalize(rawVals[1], 2),
+    normalize(rawVals[2], 2),
+    normalize(rawVals[3], 2)
+  ];
+
+  const score = normalized.reduce((sum, val, i) => sum + val * weights[i], 0);
+
+  document.getElementById('blockScore').textContent = score.toFixed(3);
+
+  localStorage.setItem('b_external', JSON.stringify({
+    score: score,
+    values: rawVals,
+    normalized: normalized,
+    weights: weights
+  }));
+}
+
+function saveBlock(){
+  compute();
+}
+
+ids.forEach(id => {
+  document.getElementById(id).addEventListener('change', compute);
+});
+
+compute();
 </script>
 </body>
 </html>
