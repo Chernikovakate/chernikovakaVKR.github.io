@@ -67,7 +67,7 @@ function compute(){
   });
   ids.forEach((id,i)=>setLevel(id+'l',vals[i]));
   const score=vals.reduce((s,x,i)=>s+((x===null?0:x)*w[i]),0);
-  localStorage.setItem('b_client', JSON.stringify({score:score, values:vals}));
+  localStorage.setItem('b_id', JSON.stringify({score:score, values:vals}));
 }
 ['c1','c2','c3','c4','c5','c6','c7','c8','c9','c10','c11','c12','c13'].forEach(id=>document.getElementById(id).addEventListener('change', compute));
 function saveBlock(){compute();}
