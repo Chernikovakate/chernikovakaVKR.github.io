@@ -155,29 +155,33 @@ h1{
       <div class="score">0.220</div>
     </div>
 
-  <div class="row">
-<div>
-Налоговая нагрузка. Отклонение от нормы отрасли, %
-<div class="small">0 — отклонение до 10%; 1 — 10–20%; 2 — более 20%</div>
-</div>
-<input id="f4_input" type="number" min="0" step="0.01" placeholder="Например 12">
-<div class="level" id="f4_level">—</div>
-<div class="score">0.230</div>
-
-    <div class="row">
-      <div>
-        Соответствие штатной численности масштабу деятельности
-        <div class="small">0 — адекватна; 1 — ниже ожидаемой; 2 — крайне низкая</div>
-      </div>
-      <select id="f5_input">
-        <option value="">Выберите значение</option>
-        <option value="0">Адекватна</option>
-        <option value="1">Ниже ожидаемой</option>
-        <option value="2">Крайне низкая</option>
-      </select>
-      <div class="level" id="f5_level">—</div>
-      <div class="score">0.200</div>
+<div class="row">
+  <div>
+    <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+      <span>Налоговая нагрузка. Отклонение от нормы отрасли, %</span>
+      <a href="https://base.garant.ru/414173177/" target="_blank" rel="noopener noreferrer" style="color:var(--accent);font-weight:700;text-decoration:none;font-size:14px;">Открыть сайт</a>
     </div>
+    <div class="small">0 — отклонение до 10%; 1 — 10–20%; 2 — более 20%</div>
+  </div>
+  <input id="f4_input" type="number" min="0" step="0.01" placeholder="Например 12">
+  <div class="level" id="f4_level">—</div>
+  <div class="score">0.230</div>
+</div>
+
+<div class="row">
+  <div>
+    Соответствие штатной численности масштабу деятельности
+    <div class="small">0 — адекватна; 1 — ниже ожидаемой; 2 — крайне низкая</div>
+  </div>
+  <select id="f5_input">
+    <option value="">Выберите значение</option>
+    <option value="0">Адекватна</option>
+    <option value="1">Ниже ожидаемой</option>
+    <option value="2">Крайне низкая</option>
+  </select>
+  <div class="level" id="f5_level">—</div>
+  <div class="score">0.200</div>
+</div>
 
     <div class="row">
       <div><strong>Итог по финансовому блоку</strong></div>
