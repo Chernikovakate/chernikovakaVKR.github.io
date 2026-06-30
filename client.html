@@ -55,9 +55,30 @@ textarea{min-height:96px;resize:vertical}
 }
 .note{font-size:13px;color:var(--muted);margin-top:8px}
 .error{color:#c0392b}
+.stop-list{margin-top:18px;border:1px solid var(--line);border-radius:16px;padding:16px}
+.stop-title{font-weight:700;color:var(--primary);margin-bottom:12px}
+.stop-item{padding:12px 0;border-bottom:1px solid var(--line)}
+.stop-item:last-child{border-bottom:none}
+.stop-item-top{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;margin-bottom:10px}
+.stop-link{white-space:nowrap;color:var(--accent);font-weight:700;text-decoration:none}
+.stop-link:hover{text-decoration:underline}
+.stop-answers{display:flex;gap:18px;flex-wrap:wrap}
+.stop-answers label{font-weight:400;color:var(--text);display:flex;align-items:center;gap:6px}
+.stop-warning{
+  margin-top:16px;
+  padding:14px 16px;
+  border:1px solid #f3b3ac;
+  background:#fff4f2;
+  color:#c0392b;
+  border-radius:14px;
+  font-weight:700;
+}
+.hidden{display:none}
 @media(max-width:800px){
   .form-grid{grid-template-columns:1fr}
   .field.full{grid-column:auto}
+  .stop-item-top{flex-direction:column}
+  .stop-link{white-space:normal}
 }
 </style>
 </head>
@@ -78,49 +99,85 @@ textarea{min-height:96px;resize:vertical}
     <h1>Карточка клиента</h1>
     <div class="muted">Заполните основные сведения о проверяемой организации.</div>
 
-    <div class="form-grid">
-      <div class="field full">
-        <label for="company">Наименование организации *</label>
-        <input id="company" type="text" placeholder="Например ООО «Альфа»">
+    <div class="stop-list">
+      <div class="stop-title">Перед заполнением анкеты проверьте организацию по следующим пунктам:</div>
+
+      <div class="stop-item">
+        <div class="stop-item-top">
+          <div>1.&nbsp;включение клиента или его бенефициарного владельца в перечень организаций и физических лиц, в отношении которых имеются сведения об их причастности к экстремистской деятельности или терроризму;</div>
+          <a class="stop-link" href="https://www.fedsfm.ru/documents/terr-list" target="_blank" rel="noopener noreferrer">Открыть сайт</a>
+        </div>
+        <div class="stop-answers">
+          <label><input type="radio" name="stop1" value="Да"> Да</label>
+          <label><input type="radio" name="stop1" value="Нет"> Нет</label>
+        </div>
       </div>
 
-      <div class="field">
-        <label for="opf">Организационно-правовая форма</label>
-        <select id="opf">
-          <option value="">Выберите значение</option>
-          <option value="ООО">ООО</option>
-          <option value="АО">АО</option>
-          <option value="ПАО">ПАО</option>
-          <option value="ИП">ИП</option>
-          <option value="НКО">НКО</option>
-          <option value="Иное">Иное</option>
-        </select>
+      <div class="stop-item">
+        <div class="stop-item-top">
+          <div>2.&nbsp;наличие вступившего в силу решения суда о приостановлении операций по счетам клиента;</div>
+          <a class="stop-link" href="https://kad.arbitr.ru/?ysclid=mr08iuxn9p91976668" target="_blank" rel="noopener noreferrer">Открыть сайт</a>
+        </div>
+        <div class="stop-answers">
+          <label><input type="radio" name="stop2" value="Да"> Да</label>
+          <label><input type="radio" name="stop2" value="Нет"> Нет</label>
+        </div>
       </div>
 
-      <div class="field">
-        <label for="inn">ИНН</label>
-        <input id="inn" type="text" placeholder="Например 7701234567">
+      <div class="stop-item">
+        <div class="stop-item-top">
+          <div>3.&nbsp;нахождение организации в списке Банка России «Компании с выявленными признаками нелегальной деятельности на финансовом рынке»</div>
+          <a class="stop-link" href="https://cbr.ru/inside/warning-list/" target="_blank" rel="noopener noreferrer">Открыть сайт</a>
+        </div>
+        <div class="stop-answers">
+          <label><input type="radio" name="stop3" value="Да"> Да</label>
+          <label><input type="radio" name="stop3" value="Нет"> Нет</label>
+        </div>
       </div>
 
-      <div class="field">
-        <label for="industry">Сфера деятельности</label>
-        <input id="industry" type="text" placeholder="Например оптовая торговля">
-      </div>
-
-      <div class="field full">
-        <label for="address">Юридический адрес</label>
-        <input id="address" type="text" placeholder="Укажите юридический адрес">
-      </div>
-
-      <div class="field full">
-        <label for="comment">Комментарий</label>
-        <textarea id="comment" placeholder="Дополнительные сведения о клиенте"></textarea>
-      </div>
+      <div id="stopWarning" class="stop-warning hidden">Внимание! Организации автоматически присваивается высокий риск. В дальнейшем заполнении анкеты нет необходимости</div>
     </div>
 
-    <div class="actions">
-      <a class="btn" href="id.html" onclick="return saveBlock()">Далее</a>
-      <button class="btn secondary" type="button" onclick="clearClient()">Очистить</button>
+    <div id="mainFormBlock">
+      <div class="form-grid">
+        <div class="field full">
+          <label for="company">Наименование организации *</label>
+          <input id="company" type="text" placeholder="Например ООО «Альфа»">
+        </div>
+
+        <div class="field">
+          <label for="opf">Организационно-правовая форма</label>
+          <select id="opf">
+            <option value="">Выберите значение</option>
+            <option value="ООО">ООО</option>
+            <option value="АО">АО</option>
+            <option value="ПАО">ПАО</option>
+            <option value="ИП">ИП</option>
+            <option value="НКО">НКО</option>
+            <option value="Иное">Иное</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="inn">ИНН</label>
+          <input id="inn" type="text" placeholder="Например 7701234567">
+        </div>
+
+        <div class="field">
+          <label for="industry">Сфера деятельности</label>
+          <input id="industry" type="text" placeholder="Например оптовая торговля">
+        </div>
+
+        <div class="field full">
+          <label for="comment">Комментарий</label>
+          <textarea id="comment" placeholder="Дополнительные сведения о клиенте"></textarea>
+        </div>
+      </div>
+
+      <div class="actions">
+        <a class="btn" href="id.html" onclick="return saveBlock()">Далее</a>
+        <button class="btn secondary" type="button" onclick="clearClient()">Очистить</button>
+      </div>
     </div>
 
     <div class="note" id="saveMsg"></div>
@@ -142,8 +199,27 @@ function fillForm(data){
   document.getElementById('opf').value = data.opf || '';
   document.getElementById('inn').value = data.inn || '';
   document.getElementById('industry').value = data.industry || '';
-  document.getElementById('address').value = data.address || '';
   document.getElementById('comment').value = data.comment || '';
+
+  if(data.stop1){
+    const el1 = document.querySelector('input[name="stop1"][value="' + data.stop1 + '"]');
+    if(el1) el1.checked = true;
+  }
+  if(data.stop2){
+    const el2 = document.querySelector('input[name="stop2"][value="' + data.stop2 + '"]');
+    if(el2) el2.checked = true;
+  }
+  if(data.stop3){
+    const el3 = document.querySelector('input[name="stop3"][value="' + data.stop3 + '"]');
+    if(el3) el3.checked = true;
+  }
+
+  updateStopState();
+}
+
+function getRadioValue(name){
+  const checked = document.querySelector('input[name="' + name + '"]:checked');
+  return checked ? checked.value : '';
 }
 
 function collectData(){
@@ -152,10 +228,32 @@ function collectData(){
     opf: document.getElementById('opf').value,
     inn: document.getElementById('inn').value.trim(),
     industry: document.getElementById('industry').value.trim(),
-    address: document.getElementById('address').value.trim(),
     comment: document.getElementById('comment').value.trim(),
+    stop1: getRadioValue('stop1'),
+    stop2: getRadioValue('stop2'),
+    stop3: getRadioValue('stop3'),
+    autoHighRisk: isAnyStopFactorYes(),
     score: 0
   };
+}
+
+function isAnyStopFactorYes(){
+  return getRadioValue('stop1') === 'Да' ||
+         getRadioValue('stop2') === 'Да' ||
+         getRadioValue('stop3') === 'Да';
+}
+
+function updateStopState(){
+  const warning = document.getElementById('stopWarning');
+  const formBlock = document.getElementById('mainFormBlock');
+
+  if(isAnyStopFactorYes()){
+    warning.classList.remove('hidden');
+    formBlock.classList.add('hidden');
+  }else{
+    warning.classList.add('hidden');
+    formBlock.classList.remove('hidden');
+  }
 }
 
 function clearCurrentBlocksKeepArchive(){
@@ -176,6 +274,14 @@ function saveBlock(){
   const msg = document.getElementById('saveMsg');
   const oldClient = readClient();
   const oldCompany = oldClient && oldClient.company ? oldClient.company : '';
+
+  if(isAnyStopFactorYes()){
+    localStorage.setItem('b_client', JSON.stringify(data));
+    localStorage.setItem('client_name', data.company || '');
+    msg.textContent = 'Для данной организации установлен высокий риск по стоп-фактору.';
+    msg.className = 'note error';
+    return false;
+  }
 
   if(!data.company){
     msg.textContent = 'Заполните обязательное поле: Наименование организации.';
@@ -205,17 +311,29 @@ function clearClient(){
   document.getElementById('opf').value = '';
   document.getElementById('inn').value = '';
   document.getElementById('industry').value = '';
-  document.getElementById('address').value = '';
   document.getElementById('comment').value = '';
+
+  document.querySelectorAll('input[name="stop1"], input[name="stop2"], input[name="stop3"]').forEach(el => {
+    el.checked = false;
+  });
+
+  updateStopState();
 
   const msg = document.getElementById('saveMsg');
   msg.textContent = 'Данные текущей проверки очищены.';
   msg.className = 'note';
 }
 
-['company','opf','inn','industry','address','comment'].forEach(id=>{
+['company','opf','inn','industry','comment'].forEach(id=>{
   const el = document.getElementById(id);
   el.addEventListener(el.tagName === 'SELECT' ? 'change' : 'input', saveDraft);
+});
+
+document.querySelectorAll('input[name="stop1"], input[name="stop2"], input[name="stop3"]').forEach(el=>{
+  el.addEventListener('change', function(){
+    updateStopState();
+    saveDraft();
+  });
 });
 
 fillForm(readClient());
