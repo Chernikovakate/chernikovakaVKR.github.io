@@ -99,45 +99,6 @@ textarea{min-height:96px;resize:vertical}
     <h1>Карточка клиента</h1>
     <div class="muted">Заполните основные сведения о проверяемой организации.</div>
 
-    <div class="stop-list">
-      <div class="stop-title">Перед заполнением анкеты проверьте организацию по следующим пунктам:</div>
-
-      <div class="stop-item">
-        <div class="stop-item-top">
-          <div>1.&nbsp;включение клиента или его бенефициарного владельца в перечень организаций и физических лиц, в отношении которых имеются сведения об их причастности к экстремистской деятельности или терроризму;</div>
-          <a class="stop-link" href="https://www.fedsfm.ru/documents/terr-list" target="_blank" rel="noopener noreferrer">Открыть сайт</a>
-        </div>
-        <div class="stop-answers">
-          <label><input type="radio" name="stop1" value="Да"> Да</label>
-          <label><input type="radio" name="stop1" value="Нет"> Нет</label>
-        </div>
-      </div>
-
-      <div class="stop-item">
-        <div class="stop-item-top">
-          <div>2.&nbsp;наличие вступившего в силу решения суда о приостановлении операций по счетам клиента;</div>
-          <a class="stop-link" href="https://kad.arbitr.ru/?ysclid=mr08iuxn9p91976668" target="_blank" rel="noopener noreferrer">Открыть сайт</a>
-        </div>
-        <div class="stop-answers">
-          <label><input type="radio" name="stop2" value="Да"> Да</label>
-          <label><input type="radio" name="stop2" value="Нет"> Нет</label>
-        </div>
-      </div>
-
-      <div class="stop-item">
-        <div class="stop-item-top">
-          <div>3.&nbsp;нахождение организации в списке Банка России «Компании с выявленными признаками нелегальной деятельности на финансовом рынке»</div>
-          <a class="stop-link" href="https://cbr.ru/inside/warning-list/" target="_blank" rel="noopener noreferrer">Открыть сайт</a>
-        </div>
-        <div class="stop-answers">
-          <label><input type="radio" name="stop3" value="Да"> Да</label>
-          <label><input type="radio" name="stop3" value="Нет"> Нет</label>
-        </div>
-      </div>
-
-      <div id="stopWarning" class="stop-warning hidden">Внимание! Организации автоматически присваивается высокий риск. В дальнейшем заполнении анкеты нет необходимости</div>
-    </div>
-
     <div id="mainFormBlock">
       <div class="form-grid">
         <div class="field full">
@@ -173,6 +134,44 @@ textarea{min-height:96px;resize:vertical}
           <textarea id="comment" placeholder="Дополнительные сведения о клиенте"></textarea>
         </div>
       </div>
+  <div class="stop-list">
+      <div class="stop-title">Перед заполнением анкеты проверьте организацию по следующим пунктам:</div>
+
+      <div class="stop-item">
+        <div class="stop-item-top">
+          <div>1.&nbsp;Включение клиента или его бенефициарного владельца в перечень организаций и физических лиц, в отношении которых имеются сведения об их причастности к экстремистской деятельности или терроризму </div>
+          <a class="stop-link" href="https://www.fedsfm.ru/documents/terr-list" target="_blank" rel="noopener noreferrer">Открыть сайт</a>
+        </div>
+        <div class="stop-answers">
+          <label><input type="radio" name="stop1" value="Да"> Да</label>
+          <label><input type="radio" name="stop1" value="Нет"> Нет</label>
+        </div>
+      </div>
+
+      <div class="stop-item">
+        <div class="stop-item-top">
+          <div>2.&nbsp;Наличие вступившего в силу решения суда о приостановлении операций по счетам клиента </div>
+          <a class="stop-link" href="https://kad.arbitr.ru/?ysclid=mr08iuxn9p91976668" target="_blank" rel="noopener noreferrer">Открыть сайт</a>
+        </div>
+        <div class="stop-answers">
+          <label><input type="radio" name="stop2" value="Да"> Да</label>
+          <label><input type="radio" name="stop2" value="Нет"> Нет</label>
+        </div>
+      </div>
+
+      <div class="stop-item">
+        <div class="stop-item-top">
+          <div>3.&nbsp;Нахождение организации в списке Банка России «Компании с выявленными признаками нелегальной деятельности на финансовом рынке»</div>
+          <a class="stop-link" href="https://cbr.ru/inside/warning-list/" target="_blank" rel="noopener noreferrer">Открыть сайт</a>
+        </div>
+        <div class="stop-answers">
+          <label><input type="radio" name="stop3" value="Да"> Да</label>
+          <label><input type="radio" name="stop3" value="Нет"> Нет</label>
+        </div>
+      </div>
+
+      <div id="stopWarning" class="stop-warning hidden">Внимание! Организации автоматически присваивается высокий риск. В дальнейшем заполнении анкеты нет необходимости</div>
+    </div>
 
       <div class="actions">
         <a class="btn" href="id.html" onclick="return saveBlock()">Далее</a>
